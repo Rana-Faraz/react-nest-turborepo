@@ -1,0 +1,21 @@
+services:
+  minio:
+    image: quay.io/minio/minio
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=admin123
+    volumes:
+      - ~/minio/data:/data
+    command: server /data --console-address ":9090"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass redis123 --ignore-warnings ARM64-COW-BUGS
+    volumes:
+      - ~/redis/data:/data
+    restart: unless-stopped

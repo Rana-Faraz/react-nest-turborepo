@@ -14,8 +14,7 @@
   },
   "dependencies": {
     "@repo/contracts": "workspace:*",
-    "@repo/auth": "workspace:*",
-    "@hedystia/better-auth-typeorm": "^0.7.0",
+    "@hedystia/better-auth-typeorm": "^0.8.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.0.0",

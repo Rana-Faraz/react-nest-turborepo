@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@repo/contracts": "workspace:*",
-    "@repo/auth": "workspace:*",
     "@radix-ui/react-slot": "^1.1.2",
     "@tanstack/react-query": "^5.67.3",
     "@tanstack/react-router": "^1.166.2",

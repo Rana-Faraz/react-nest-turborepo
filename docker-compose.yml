@@ -19,3 +19,14 @@ services:
     volumes:
       - ~/redis/data:/data
     restart: unless-stopped
+
+  queuedash:
+    image: ghcr.io/alexbudure/queuedash:latest
+    ports:
+      - "3100:3000"
+    depends_on:
+      - redis
+    environment:
+      QUEUES_CONFIG_JSON: >-
+        {"queues":[{"name":"${WORKER_QUEUE_NAME:-background-tasks}","displayName":"Background Tasks","type":"bullmq","connectionUrl":"redis://:${REDIS_PASSWORD:-redis123}@redis:${REDIS_PORT:-6379}/${REDIS_DB:-0}"}]}
+    restart: unless-stopped

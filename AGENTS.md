@@ -6,10 +6,11 @@
 - Runtime split:
   - `apps/backend`: NestJS API with TypeORM, Better Auth, and `nestjs-zod`.
   - `apps/web`: React 19 + Vite + TanStack Router + TanStack Query.
+  - `apps/worker`: Bun worker for BullMQ jobs.
   - `packages/contracts`: shared Zod schemas and API/error contracts.
-  - `packages/auth`: shared auth package consumed by backend and web.
+  - `packages/jobs`: shared queue definitions and job payload validation.
   - `packages/types`: shared TS package for cross-project types/utilities.
-- Node requirement: `>=18`.
+- Node requirement: `>=22`.
 - Package manager: `pnpm@9.0.0`.
 
 ## Working Norms
@@ -44,8 +45,8 @@
 
 - Contracts build: `pnpm --filter @repo/contracts build`
 - Contracts lint: `pnpm --filter @repo/contracts lint`
-- Auth package build: `pnpm --filter @repo/auth build`
-- Auth package lint: `pnpm --filter @repo/auth lint`
+- Jobs build: `pnpm --filter @repo/jobs build`
+- Jobs lint: `pnpm --filter @repo/jobs lint`
 
 ## Architecture Notes
 
@@ -68,12 +69,13 @@
 ### Shared Packages
 
 - `packages/contracts/src`: canonical cross-app schemas and error helpers.
-- `packages/auth/src`: reusable auth exports for backend/web integration.
+- `packages/jobs/src`: canonical queue definitions and job validation.
 - `packages/types/src`: shared low-level TS exports.
 
 ## Change Guidance
 
 - For API changes, update `packages/contracts` first, then wire backend handlers/controllers, then update frontend queries/components.
+- For queue/job changes, update `packages/jobs` first, then wire backend producers and worker consumers.
 - For new backend modules, follow the existing Nest module/controller/service split under `apps/backend/src/modules`.
 - For new frontend data flows, keep fetch/query logic in `apps/web/src/queries` and keep route components thin.
 - Preserve the current React/TanStack patterns instead of introducing a second routing or state-management approach.
@@ -83,4 +85,4 @@
 - Run the narrowest relevant checks after changes.
 - Typical frontend change: `pnpm --filter web test` and `pnpm --filter web lint`.
 - Typical backend change: `pnpm --filter backend test` and `pnpm --filter backend lint`.
-- Cross-cutting contract change: `pnpm check-types` and any affected package/app build or tests.
+- Cross-cutting contract or job change: `pnpm check-types` and any affected package/app build or tests.

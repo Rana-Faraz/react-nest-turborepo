@@ -9,7 +9,6 @@ import {
   demoQueryKeys,
   demoSubmissionsQueryOptions,
 } from "@/queries/demo";
-import { auth } from "@/lib/auth";
 import { AppCard, AppShell } from "@/router-shell";
 
 function HomeRouteComponent() {
@@ -17,7 +16,6 @@ function HomeRouteComponent() {
   const { data: submissions } = useSuspenseQuery(
     demoSubmissionsQueryOptions({ limit: 5 }),
   );
-  const session = auth.useSession();
   const queryClient = useQueryClient();
   const [formValues, setFormValues] = useState<CreateDemoSubmissionBody>({
     name: "",
@@ -85,16 +83,6 @@ function HomeRouteComponent() {
                 Status
               </p>
               <p className="text-lg font-medium">{health.status}</p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                Auth Session
-              </p>
-              <p className="text-lg font-medium">
-                {session.isPending
-                  ? "loading"
-                  : session.data?.user?.email ?? "anonymous"}
-              </p>
             </div>
           </div>
 

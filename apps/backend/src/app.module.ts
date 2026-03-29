@@ -1,6 +1,7 @@
 import { createValidationErrorResponse } from "@repo/contracts";
+import { BullModule } from "@nestjs/bullmq";
 import { BadRequestException, Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
 import { HealthModule } from "./modules/health/health.module";
 import { typeOrmAsyncConfig } from "./config/typeorm.config";
@@ -29,7 +30,19 @@ const AppZodValidationPipe = createZodValidationPipe({
       envFilePath: ".env",
       isGlobal: true,
     }),
-
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          db: Number(configService.get("REDIS_DB")) || 0,
+          host: configService.get("REDIS_HOST") || "localhost",
+          password: configService.get("REDIS_PASSWORD") || undefined,
+          port: Number(configService.get("REDIS_PORT")) || 6379,
+        },
+        prefix: configService.get("REDIS_QUEUE_PREFIX") || undefined,
+      }),
+    }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     AuthModule.forRoot({ auth, disableGlobalAuthGuard: true }),
     DemoModule,

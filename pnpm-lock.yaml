@@ -22,7 +22,10 @@ importers:
     dependencies:
       '@hedystia/better-auth-typeorm':
         specifier: ^0.8.0
-        version: 0.8.0(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(typeorm@0.3.28(ioredis@5.9.3)(mongodb@7.1.0)(mysql2@3.15.3)(pg@8.16.3)(ts-node@10.9.2(@types/node@18.15.11)(typescript@5.9.2)))
+        version: 0.8.0(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(typeorm@0.3.28(ioredis@5.9.3)(mongodb@7.1.0)(mysql2@3.15.3)(pg@8.16.3)(ts-node@10.9.2(@types/node@18.15.11)(typescript@5.9.2)))
+      '@nestjs/bullmq':
+        specifier: ^10.2.3
+        version: 10.2.3(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(bullmq@5.70.4)
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2)
@@ -44,12 +47,18 @@ importers:
       '@repo/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@repo/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
       '@thallesp/nestjs-better-auth':
         specifier: ^2.4.0
-        version: 2.4.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(express@4.21.2)(graphql@16.12.0)(typescript@5.9.2)
+        version: 2.4.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(express@4.21.2)(graphql@16.12.0)(typescript@5.9.2)
       better-auth:
         specifier: ^1.5.4
-        version: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+        version: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+      bullmq:
+        specifier: ^5.61.0
+        version: 5.70.4
       nestjs-zod:
         specifier: ^5.1.1
         version: 5.1.1(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/swagger@7.4.2(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14))(rxjs@7.8.2)(zod@4.3.6)
@@ -134,7 +143,7 @@ importers:
         version: 1.13.6
       better-auth:
         specifier: ^1.5.4
-        version: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.28.4)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(pg@8.16.3)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@4.0.18(@types/node@22.15.3)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@22.15.3)(typescript@5.7.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+        version: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.28.4)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(pg@8.16.3)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@4.0.18(@types/node@22.15.3)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@22.15.3)(typescript@5.7.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -235,79 +244,22 @@ importers:
 
   apps/worker:
     dependencies:
-      '@nestjs/bullmq':
-        specifier: ^10.2.3
-        version: 10.2.3(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(bullmq@5.70.4)
-      '@nestjs/common':
-        specifier: ^10.0.0
-        version: 10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2)
-      '@nestjs/config':
-        specifier: ^3.3.0
-        version: 3.3.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(rxjs@7.8.2)
-      '@nestjs/core':
-        specifier: ^10.0.0
-        version: 10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2)
-      '@nestjs/platform-express':
-        specifier: ^10.0.0
-        version: 10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20)
+      '@repo/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
       bullmq:
         specifier: ^5.61.0
         version: 5.70.4
-      reflect-metadata:
-        specifier: ^0.1.13
-        version: 0.1.14
-      rxjs:
-        specifier: ^7.2.0
-        version: 7.8.2
     devDependencies:
-      '@nestjs/cli':
-        specifier: ^10.0.0
-        version: 10.4.9
-      '@nestjs/schematics':
-        specifier: ^10.0.0
-        version: 10.2.3(chokidar@3.6.0)(typescript@5.9.2)
-      '@nestjs/testing':
-        specifier: ^10.0.0
-        version: 10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20))
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
-      '@types/jest':
-        specifier: ^30.0.0
-        version: 30.0.0
+      '@types/bun':
+        specifier: ^1.3.11
+        version: 1.3.11
       '@types/node':
         specifier: 18.15.11
         version: 18.15.11
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^5.0.0
-        version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.9.2))(eslint@8.57.1)(typescript@5.9.2)
-      '@typescript-eslint/parser':
-        specifier: ^5.0.0
-        version: 5.62.0(eslint@8.57.1)(typescript@5.9.2)
-      eslint:
-        specifier: ^8.0.1
-        version: 8.57.1
-      eslint-config-prettier:
-        specifier: ^8.3.0
-        version: 8.10.2(eslint@8.57.1)
-      jest:
-        specifier: ^29.7.0
-        version: 29.7.0(@types/node@18.15.11)(ts-node@10.9.2(@types/node@18.15.11)(typescript@5.9.2))
-      prettier:
-        specifier: ^2.3.2
-        version: 2.8.8
-      source-map-support:
-        specifier: ^0.5.20
-        version: 0.5.21
-      ts-jest:
-        specifier: ^29.4.6
-        version: 29.4.6(@babel/core@7.29.0)(@jest/transform@30.2.0)(@jest/types@30.2.0)(babel-jest@30.2.0(@babel/core@7.29.0))(jest-util@30.2.0)(jest@29.7.0(@types/node@18.15.11)(ts-node@10.9.2(@types/node@18.15.11)(typescript@5.9.2)))(typescript@5.9.2)
-      ts-loader:
-        specifier: ^9.2.3
-        version: 9.5.4(typescript@5.9.2)(webpack@5.97.1)
-      ts-node:
-        specifier: ^10.0.0
-        version: 10.9.2(@types/node@18.15.11)(typescript@5.9.2)
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -364,6 +316,28 @@ importers:
       react-email:
         specifier: 5.0.7
         version: 5.0.7
+
+  packages/jobs:
+    dependencies:
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/node':
+        specifier: ^24.7.2
+        version: 24.7.2
+      eslint:
+        specifier: ^9.37.0
+        version: 9.37.0(jiti@2.6.1)
+      tsup:
+        specifier: ^8.5.0
+        version: 8.5.0(@microsoft/api-extractor@7.53.3(@types/node@24.7.2))(jiti@2.6.1)(postcss@8.5.6)(tsx@4.21.0)(typescript@5.9.2)(yaml@2.8.1)
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
 
   packages/types:
     devDependencies:
@@ -2495,6 +2469,9 @@ packages:
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
 
+  '@types/bun@1.3.11':
+    resolution: {integrity: sha512-5vPne5QvtpjGpsGYXiFyycfpDF2ECyPcTSsFBMa0fraoxiQyMJ3SmuQIGhzPg2WJuWxVBoxWJ2kClYTcw/4fAg==}
+
   '@types/chai@5.2.3':
     resolution: {integrity: sha512-Mw558oeA9fFbv65/y4mHtXDs9bPnFMZAL/jxdPFUpOHHIXX91mcgEHbS5Lahr+pwZFR8A7GQleRWeI6cGFC2UA==}
 
@@ -3176,6 +3153,9 @@ packages:
 
   bullmq@5.70.4:
     resolution: {integrity: sha512-S58YT/tGdhc4pEPcIahtZRBR1TcTLpss1UKiXimF+Vy4yZwF38pW2IvhHqs4j4dEbZqDt8oi0jGGN/WYQHbPDg==}
+
+  bun-types@1.3.11:
+    resolution: {integrity: sha512-1KGPpoxQWl9f6wcZh57LvrPIInQMn2TQ7jsgxqpRzg+l0QPOFvJVH7HmvHo/AiPgwXy+/Thf6Ov3EdVn1vOabg==}
 
   bundle-require@5.1.0:
     resolution: {integrity: sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA==}
@@ -4237,6 +4217,7 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@10.5.0:
@@ -4252,7 +4233,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   globals@13.24.0:
     resolution: {integrity: sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==}
@@ -7560,7 +7541,7 @@ snapshots:
       '@babel/parser': 7.28.4
       '@babel/template': 7.27.2
       '@babel/types': 7.28.4
-      debug: 4.4.1
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -7599,17 +7580,17 @@ snapshots:
       nanostores: 1.1.1
       zod: 4.3.6
 
-  '@better-auth/drizzle-adapter@1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))':
+  '@better-auth/drizzle-adapter@1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))':
     dependencies:
       '@better-auth/core': 1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1)
       '@better-auth/utils': 0.3.1
-      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))
+      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))
 
-  '@better-auth/drizzle-adapter@1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))':
+  '@better-auth/drizzle-adapter@1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))':
     dependencies:
       '@better-auth/core': 1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1)
       '@better-auth/utils': 0.3.1
-      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))
+      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))
 
   '@better-auth/kysely-adapter@1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(kysely@0.28.11)':
     dependencies:
@@ -7970,9 +7951,9 @@ snapshots:
       '@noble/hashes': 2.0.1
     optional: true
 
-  ? '@hedystia/better-auth-typeorm@0.8.0(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(typeorm@0.3.28(ioredis@5.9.3)(mongodb@7.1.0)(mysql2@3.15.3)(pg@8.16.3)(ts-node@10.9.2(@types/node@18.15.11)(typescript@5.9.2)))'
+  ? '@hedystia/better-auth-typeorm@0.8.0(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(typeorm@0.3.28(ioredis@5.9.3)(mongodb@7.1.0)(mysql2@3.15.3)(pg@8.16.3)(ts-node@10.9.2(@types/node@18.15.11)(typescript@5.9.2)))'
   : dependencies:
-      better-auth: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+      better-auth: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
       typeorm: 0.3.28(ioredis@5.9.3)(mongodb@7.1.0)(mysql2@3.15.3)(pg@8.16.3)(ts-node@10.9.2(@types/node@18.15.11)(typescript@5.9.2))
 
   '@hono/node-server@1.19.9(hono@4.11.4)':
@@ -9301,11 +9282,11 @@ snapshots:
 
   '@tanstack/virtual-file-routes@1.161.4': {}
 
-  ? '@thallesp/nestjs-better-auth@2.4.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(express@4.21.2)(graphql@16.12.0)(typescript@5.9.2)'
+  ? '@thallesp/nestjs-better-auth@2.4.0(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/core@10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2))(better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1)))(express@4.21.2)(graphql@16.12.0)(typescript@5.9.2)'
   : dependencies:
       '@nestjs/common': 10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2)
       '@nestjs/core': 10.4.20(@nestjs/common@10.4.20(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.1.14)(rxjs@7.8.2))(@nestjs/platform-express@10.4.20)(reflect-metadata@0.1.14)(rxjs@7.8.2)
-      better-auth: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+      better-auth: 1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
       express: 4.21.2
       typescript: 5.9.2
     optionalDependencies:
@@ -9352,6 +9333,10 @@ snapshots:
   '@types/babel__traverse@7.28.0':
     dependencies:
       '@babel/types': 7.28.4
+
+  '@types/bun@1.3.11':
+    dependencies:
+      bun-types: 1.3.11
 
   '@types/chai@5.2.3':
     dependencies:
@@ -9571,7 +9556,7 @@ snapshots:
       debug: 4.4.1
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.7.2
+      semver: 7.7.4
       tsutils: 3.21.0(typescript@5.9.2)
     optionalDependencies:
       typescript: 5.9.2
@@ -9588,7 +9573,7 @@ snapshots:
       fast-glob: 3.3.3
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.7.2
+      semver: 7.7.4
       ts-api-utils: 2.1.0(typescript@5.7.2)
       typescript: 5.7.2
     transitivePeerDependencies:
@@ -9604,7 +9589,7 @@ snapshots:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.9.2)
       eslint: 8.57.1
       eslint-scope: 5.1.1
-      semver: 7.7.2
+      semver: 7.7.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -10117,10 +10102,10 @@ snapshots:
 
   baseline-browser-mapping@2.8.12: {}
 
-  ? better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.28.4)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(pg@8.16.3)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@4.0.18(@types/node@22.15.3)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@22.15.3)(typescript@5.7.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+  ? better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.28.4)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(pg@8.16.3)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vitest@4.0.18(@types/node@22.15.3)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@22.15.3)(typescript@5.7.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
   : dependencies:
       '@better-auth/core': 1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1)
-      '@better-auth/drizzle-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))
+      '@better-auth/drizzle-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)))
       '@better-auth/kysely-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(kysely@0.28.11)
       '@better-auth/memory-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)
       '@better-auth/mongo-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(mongodb@7.1.0)
@@ -10138,7 +10123,7 @@ snapshots:
       zod: 4.3.6
     optionalDependencies:
       '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2)
-      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))
+      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))
       mongodb: 7.1.0
       mysql2: 3.15.3
       next: 16.1.6(@babel/core@7.28.4)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -10150,10 +10135,10 @@ snapshots:
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
 
-  ? better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
+  ? better-auth@1.5.4(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))(mongodb@7.1.0)(mysql2@3.15.3)(next@16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(pg@8.16.3)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(vitest@4.0.18(@types/node@18.15.11)(jiti@2.6.1)(jsdom@28.1.0(@noble/hashes@2.0.1))(lightningcss@1.31.1)(msw@2.12.10(@types/node@18.15.11)(typescript@5.9.2))(terser@5.44.0)(tsx@4.21.0)(yaml@2.8.1))
   : dependencies:
       '@better-auth/core': 1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1)
-      '@better-auth/drizzle-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))
+      '@better-auth/drizzle-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)))
       '@better-auth/kysely-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(kysely@0.28.11)
       '@better-auth/memory-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)
       '@better-auth/mongo-adapter': 1.5.4(@better-auth/core@1.5.4(@better-auth/utils@0.3.1)(@better-fetch/fetch@1.1.21)(better-call@1.3.2(zod@4.3.6))(jose@6.2.0)(kysely@0.28.11)(nanostores@1.1.1))(@better-auth/utils@0.3.1)(mongodb@7.1.0)
@@ -10171,7 +10156,7 @@ snapshots:
       zod: 4.3.6
     optionalDependencies:
       '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2)
-      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))
+      drizzle-orm: 0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))
       mongodb: 7.1.0
       mysql2: 3.15.3
       next: 16.1.6(@babel/core@7.29.0)(babel-plugin-react-compiler@19.0.0-beta-40c6c23-20250301)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -10280,6 +10265,10 @@ snapshots:
       uuid: 11.1.0
     transitivePeerDependencies:
       - supports-color
+
+  bun-types@1.3.11:
+    dependencies:
+      '@types/node': 24.7.2
 
   bundle-require@5.1.0(esbuild@0.25.10):
     dependencies:
@@ -10713,20 +10702,22 @@ snapshots:
 
   dotenv@16.6.1: {}
 
-  drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)):
+  drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)):
     optionalDependencies:
       '@electric-sql/pglite': 0.3.15
       '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2))(typescript@5.7.2)
+      bun-types: 1.3.11
       kysely: 0.28.11
       mysql2: 3.15.3
       pg: 8.16.3
       postgres: 3.4.7
       prisma: 7.4.2(@types/react@19.1.0)(magicast@0.5.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.2)
 
-  drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)):
+  drizzle-orm@0.45.1(@electric-sql/pglite@0.3.15)(@prisma/client@7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2))(bun-types@1.3.11)(kysely@0.28.11)(mysql2@3.15.3)(pg@8.16.3)(postgres@3.4.7)(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2)):
     optionalDependencies:
       '@electric-sql/pglite': 0.3.15
       '@prisma/client': 7.4.2(prisma@7.4.2(@types/react@19.2.7)(magicast@0.5.2)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.2))(typescript@5.9.2)
+      bun-types: 1.3.11
       kysely: 0.28.11
       mysql2: 3.15.3
       pg: 8.16.3
@@ -11409,7 +11400,7 @@ snapshots:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
-      semver: 7.7.2
+      semver: 7.7.4
       tapable: 2.3.0
       typescript: 5.7.2
       webpack: 5.97.1

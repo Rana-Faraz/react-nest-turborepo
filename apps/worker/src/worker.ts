@@ -56,7 +56,7 @@ export function createBackgroundWorker(
   const worker = new Worker(config.queueName, createJobHandler(logger), {
     concurrency: config.concurrency,
     connection: config.redis,
-    prefix: config.redisQueuePrefix,
+    ...(config.redisQueuePrefix ? { prefix: config.redisQueuePrefix } : {}),
   });
 
   registerWorkerEventLogging(worker, logger);

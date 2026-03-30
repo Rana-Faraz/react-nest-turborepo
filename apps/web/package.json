@@ -8,6 +8,7 @@
     "router:watch": "tsr watch",
     "dev": "pnpm run router:generate && vite",
     "build": "pnpm run router:generate && vite build && tsc -b",
+    "check-types": "tsc -b --pretty false",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write \"**/*.ts\" \"**/*.tsx\"",

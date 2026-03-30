@@ -1,43 +1,42 @@
-import { type MigrationInterface, type QueryRunner, Table, TableIndex, TableColumn } from 'typeorm';
+import { type MigrationInterface, type QueryRunner, Table } from "typeorm";
 
 export class CreateVerification1772822691769 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'verification',
+        name: "verification",
         columns: [
           {
-            name: 'id',
-            type: 'text',
+            name: "id",
+            type: "text",
             isPrimary: true,
           },
           {
-            name: 'identifier',
-            type: 'text',
+            name: "identifier",
+            type: "text",
           },
           {
-            name: 'value',
-            type: 'text',
+            name: "value",
+            type: "text",
           },
           {
-            name: 'expiresAt',
-            type: 'date',
+            name: "expiresAt",
+            type: "date",
           },
           {
-            name: 'createdAt',
-            type: 'date',
+            name: "createdAt",
+            type: "date",
           },
           {
-            name: 'updatedAt',
-            type: 'date',
-          }
+            name: "updatedAt",
+            type: "date",
+          },
         ],
       }),
     );
-
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('verification');
+    await queryRunner.dropTable("verification");
   }
 }

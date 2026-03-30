@@ -1,5 +1,9 @@
 import type { CreateDemoSubmissionBody } from "@repo/contracts";
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { asApiError } from "@/lib/api";
@@ -14,7 +18,7 @@ import { AppCard, AppShell } from "@/router-shell";
 function HomeRouteComponent() {
   const { data: health } = useSuspenseQuery(healthQueryOptions());
   const { data: submissions } = useSuspenseQuery(
-    demoSubmissionsQueryOptions({ limit: 5 }),
+    demoSubmissionsQueryOptions({ limit: 5 })
   );
   const queryClient = useQueryClient();
   const [formValues, setFormValues] = useState<CreateDemoSubmissionBody>({
@@ -36,11 +40,13 @@ function HomeRouteComponent() {
     },
     onError: (error) => {
       const apiError = asApiError(error);
+      const nameErrors = apiError.fieldErrors["name"];
+      const scoreErrors = apiError.fieldErrors["score"];
 
       setFormError(apiError.formErrors[0] ?? apiError.message);
       setFieldErrors({
-        name: apiError.fieldErrors.name,
-        score: apiError.fieldErrors.score,
+        ...(nameErrors ? { name: nameErrors } : {}),
+        ...(scoreErrors ? { score: scoreErrors } : {}),
       });
     },
   });
@@ -57,13 +63,13 @@ function HomeRouteComponent() {
       <AppCard>
         <div className="space-y-8">
           <div className="space-y-4">
-            <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
+            <p className="text-muted-foreground text-sm font-medium tracking-[0.24em] uppercase">
               Frontend Foundation
             </p>
             <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
               Shared Zod contracts are wired across Nest and React.
             </h1>
-            <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+            <p className="text-muted-foreground max-w-2xl text-base leading-7 sm:text-lg">
               The canonical API schema lives in <code>@repo/contracts</code>.
               Nest derives DTOs through <code>nestjs-zod</code>, and the
               frontend uses the same schemas for request shaping, response
@@ -71,15 +77,15 @@ function HomeRouteComponent() {
             </p>
           </div>
 
-          <div className="grid gap-4 rounded-2xl border border-border bg-background/70 p-5 sm:grid-cols-3">
+          <div className="border-border bg-background/70 grid gap-4 rounded-2xl border p-5 sm:grid-cols-3">
             <div className="space-y-1">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
                 Service
               </p>
               <p className="text-lg font-medium">{health.service}</p>
             </div>
             <div className="space-y-1">
-              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
                 Status
               </p>
               <p className="text-lg font-medium">{health.status}</p>
@@ -87,17 +93,17 @@ function HomeRouteComponent() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <section className="space-y-4 rounded-2xl border border-border bg-background/70 p-5">
+            <section className="border-border bg-background/70 space-y-4 rounded-2xl border p-5">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  <p className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
                     Query Demo
                   </p>
                   <h2 className="text-2xl font-semibold tracking-tight">
                     `GET /demo/submissions?limit=5`
                   </h2>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-muted-foreground text-sm">
                   Total: {submissions.total}
                 </p>
               </div>
@@ -105,12 +111,12 @@ function HomeRouteComponent() {
               <div className="space-y-3">
                 {submissions.items.map((submission) => (
                   <article
-                    className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3"
+                    className="border-border bg-card flex items-center justify-between rounded-xl border px-4 py-3"
                     key={submission.id}
                   >
                     <div>
                       <p className="font-medium">{submission.name}</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-muted-foreground text-sm">
                         {new Date(submission.createdAt).toLocaleString()}
                       </p>
                     </div>
@@ -120,9 +126,9 @@ function HomeRouteComponent() {
               </div>
             </section>
 
-            <section className="space-y-4 rounded-2xl border border-border bg-background/70 p-5">
+            <section className="border-border bg-background/70 space-y-4 rounded-2xl border p-5">
               <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                <p className="text-muted-foreground text-xs tracking-[0.2em] uppercase">
                   Mutation Demo
                 </p>
                 <h2 className="text-2xl font-semibold tracking-tight">
@@ -134,7 +140,7 @@ function HomeRouteComponent() {
                 <label className="block space-y-2">
                   <span className="text-sm font-medium">Name</span>
                   <input
-                    className="h-11 w-full rounded-xl border border-border bg-card px-3"
+                    className="border-border bg-card h-11 w-full rounded-xl border px-3"
                     onChange={(event) =>
                       setFormValues((current) => ({
                         ...current,
@@ -144,7 +150,7 @@ function HomeRouteComponent() {
                     value={formValues.name}
                   />
                   {fieldErrors.name?.length ? (
-                    <p className="text-sm text-destructive">
+                    <p className="text-destructive text-sm">
                       {fieldErrors.name[0]}
                     </p>
                   ) : null}
@@ -153,7 +159,7 @@ function HomeRouteComponent() {
                 <label className="block space-y-2">
                   <span className="text-sm font-medium">Score</span>
                   <input
-                    className="h-11 w-full rounded-xl border border-border bg-card px-3"
+                    className="border-border bg-card h-11 w-full rounded-xl border px-3"
                     max={100}
                     min={0}
                     onChange={(event) =>
@@ -166,18 +172,18 @@ function HomeRouteComponent() {
                     value={formValues.score}
                   />
                   {fieldErrors.score?.length ? (
-                    <p className="text-sm text-destructive">
+                    <p className="text-destructive text-sm">
                       {fieldErrors.score[0]}
                     </p>
                   ) : null}
                 </label>
 
                 {formError ? (
-                  <p className="text-sm text-destructive">{formError}</p>
+                  <p className="text-destructive text-sm">{formError}</p>
                 ) : null}
 
                 <button
-                  className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="bg-primary text-primary-foreground inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-medium transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
                   disabled={createSubmissionMutation.isPending}
                   type="submit"
                 >
@@ -199,7 +205,7 @@ export const Route = createFileRoute("/")({
     await Promise.all([
       context.queryClient.ensureQueryData(healthQueryOptions()),
       context.queryClient.ensureQueryData(
-        demoSubmissionsQueryOptions({ limit: 5 }),
+        demoSubmissionsQueryOptions({ limit: 5 })
       ),
     ]);
   },

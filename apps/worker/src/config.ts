@@ -43,7 +43,7 @@ export function loadWorkerConfig(
 ): WorkerConfig {
   const concurrency = parseInteger(
     "WORKER_CONCURRENCY",
-    env.WORKER_CONCURRENCY,
+    env["WORKER_CONCURRENCY"],
     DEFAULT_WORKER_CONCURRENCY,
   );
 
@@ -51,8 +51,14 @@ export function loadWorkerConfig(
     throw new Error("WORKER_CONCURRENCY must be greater than 0");
   }
 
-  const port = parseInteger("REDIS_PORT", env.REDIS_PORT, DEFAULT_REDIS_PORT);
-  const db = parseInteger("REDIS_DB", env.REDIS_DB, DEFAULT_REDIS_DB);
+  const port = parseInteger(
+    "REDIS_PORT",
+    env["REDIS_PORT"],
+    DEFAULT_REDIS_PORT,
+  );
+  const db = parseInteger("REDIS_DB", env["REDIS_DB"], DEFAULT_REDIS_DB);
+  const redisPassword = env["REDIS_PASSWORD"] || undefined;
+  const redisQueuePrefix = env["REDIS_QUEUE_PREFIX"] || undefined;
 
   if (port < 1) {
     throw new Error("REDIS_PORT must be greater than 0");
@@ -63,15 +69,15 @@ export function loadWorkerConfig(
   }
 
   return {
-    workerName: env.WORKER_NAME || DEFAULT_WORKER_NAME,
-    queueName: env.WORKER_QUEUE_NAME || DEFAULT_QUEUE_NAME,
+    workerName: env["WORKER_NAME"] || DEFAULT_WORKER_NAME,
+    queueName: env["WORKER_QUEUE_NAME"] || DEFAULT_QUEUE_NAME,
     concurrency,
     redis: {
-      host: env.REDIS_HOST || DEFAULT_REDIS_HOST,
+      host: env["REDIS_HOST"] || DEFAULT_REDIS_HOST,
       port,
       db,
-      password: env.REDIS_PASSWORD || undefined,
+      ...(redisPassword ? { password: redisPassword } : {}),
     },
-    redisQueuePrefix: env.REDIS_QUEUE_PREFIX || undefined,
+    ...(redisQueuePrefix ? { redisQueuePrefix } : {}),
   };
 }

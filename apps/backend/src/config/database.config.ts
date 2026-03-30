@@ -6,14 +6,29 @@ ConfigModule.forRoot({
   isGlobal: true,
   envFilePath: resolve(__dirname, "../../.env"),
 });
+
+function getRequiredEnv(key: string): string {
+  const value = process.env[key];
+
+  if (!value) {
+    throw new Error(`${key} is required`);
+  }
+
+  return value;
+}
+
 const IS_DEV = process.env.NODE_ENV === "local";
+const dbHost = getRequiredEnv("DB_HOST");
+const dbUser = getRequiredEnv("DB_USER");
+const dbName = getRequiredEnv("DB_NAME");
+const dbPassword = process.env["DB_PASSWORD"] || undefined;
 const databaseConfig: DataSourceOptions = {
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT) || 5432,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: dbHost,
+  port: Number(process.env["DB_PORT"]) || 5432,
+  username: dbUser,
+  ...(dbPassword ? { password: dbPassword } : {}),
+  database: dbName,
   entities: [__dirname + "../../**/**/*entity{.ts,.js}"],
 
   // We are using migrations, synchronize should be set to false.
@@ -24,11 +39,13 @@ const databaseConfig: DataSourceOptions = {
   // (e.g. CREATE INDEX CONCURRENTLY cannot run inside a transaction).
   migrationsTransactionMode: "each",
   migrations: [__dirname + "/../migrations/*{.ts,.js}"],
-  ssl: IS_DEV
-    ? undefined
-    : {
-        rejectUnauthorized: false,
-      },
+  ...(!IS_DEV
+    ? {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }
+    : {}),
 };
 
 export default databaseConfig;

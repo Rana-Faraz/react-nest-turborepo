@@ -1,78 +1,77 @@
-import { type MigrationInterface, type QueryRunner, Table, TableIndex, TableColumn } from 'typeorm';
+import { type MigrationInterface, type QueryRunner, Table } from "typeorm";
 
 export class CreateAccount1772822691769 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'account',
+        name: "account",
         columns: [
           {
-            name: 'id',
-            type: 'text',
+            name: "id",
+            type: "text",
             isPrimary: true,
           },
           {
-            name: 'accountId',
-            type: 'text',
+            name: "accountId",
+            type: "text",
           },
           {
-            name: 'providerId',
-            type: 'text',
+            name: "providerId",
+            type: "text",
           },
           {
-            name: 'userId',
-            type: 'text',
+            name: "userId",
+            type: "text",
           },
           {
-            name: 'accessToken',
-            type: 'text',
+            name: "accessToken",
+            type: "text",
             isNullable: true,
           },
           {
-            name: 'refreshToken',
-            type: 'text',
+            name: "refreshToken",
+            type: "text",
             isNullable: true,
           },
           {
-            name: 'idToken',
-            type: 'text',
+            name: "idToken",
+            type: "text",
             isNullable: true,
           },
           {
-            name: 'accessTokenExpiresAt',
-            type: 'date',
+            name: "accessTokenExpiresAt",
+            type: "date",
             isNullable: true,
           },
           {
-            name: 'refreshTokenExpiresAt',
-            type: 'date',
+            name: "refreshTokenExpiresAt",
+            type: "date",
             isNullable: true,
           },
           {
-            name: 'scope',
-            type: 'text',
+            name: "scope",
+            type: "text",
             isNullable: true,
           },
           {
-            name: 'password',
-            type: 'text',
+            name: "password",
+            type: "text",
             isNullable: true,
           },
           {
-            name: 'createdAt',
-            type: 'date',
+            name: "createdAt",
+            type: "date",
           },
           {
-            name: 'updatedAt',
-            type: 'date',
-          }
+            name: "updatedAt",
+            type: "date",
+          },
         ],
       }),
     );
-
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('account');
+    await queryRunner.dropTable("account");
   }
 }

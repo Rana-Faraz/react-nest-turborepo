@@ -13,7 +13,7 @@ import axios, {
 import { ZodError } from "zod";
 
 export const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:3000"
+  import.meta.env["VITE_API_URL"] || "http://localhost:3000"
 ).replace(/\/$/, "");
 
 export class ApiError extends Error {
@@ -58,7 +58,7 @@ function createUnknownApiError(message: string, statusCode = 500): ApiError {
 
 function parseApiErrorPayload(
   payload: unknown,
-  fallback: { statusCode: number; message: string },
+  fallback: { statusCode: number; message: string }
 ): ApiError {
   const parsed = apiErrorResponseSchema.safeParse(payload);
 
@@ -95,7 +95,8 @@ function normalizeAxiosError(error: AxiosError): ApiError {
   if (error.response) {
     return parseApiErrorPayload(error.response.data, {
       statusCode: error.response.status,
-      message: error.message || `Request failed with status ${error.response.status}`,
+      message:
+        error.message || `Request failed with status ${error.response.status}`,
     });
   }
 
@@ -120,7 +121,7 @@ export function asApiError(error: unknown): ApiError {
   }
 
   return createUnknownApiError(
-    error instanceof Error ? error.message : "Unknown request error",
+    error instanceof Error ? error.message : "Unknown request error"
   );
 }
 
@@ -150,12 +151,12 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(asApiError(error)),
+  (error) => Promise.reject(asApiError(error))
 );
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(asApiError(error)),
+  (error) => Promise.reject(asApiError(error))
 );
 
 export async function apiRequest<TResponse, TBody = unknown>({
@@ -163,15 +164,16 @@ export async function apiRequest<TResponse, TBody = unknown>({
   method,
   path,
   ...config
-}: ApiRequestOptions<TBody>,
-): Promise<TResponse> {
-  const response = await apiClient.request<TResponse, { data: TResponse }, TBody>(
-    {
-      ...config,
-      method,
-      url: path,
-      data: body,
-    },
-  );
+}: ApiRequestOptions<TBody>): Promise<TResponse> {
+  const response = await apiClient.request<
+    TResponse,
+    { data: TResponse },
+    TBody
+  >({
+    ...config,
+    method,
+    url: path,
+    ...(body !== undefined ? { data: body } : {}),
+  });
   return response.data;
 }

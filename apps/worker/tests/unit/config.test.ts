@@ -21,9 +21,7 @@ describe("loadWorkerConfig", () => {
         host: DEFAULT_REDIS_HOST,
         port: DEFAULT_REDIS_PORT,
         db: DEFAULT_REDIS_DB,
-        password: undefined,
       },
-      redisQueuePrefix: undefined,
     });
   });
 

@@ -8,7 +8,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || true,
+    origin: process.env["FRONTEND_URL"] || true,
     credentials: true,
   });
 
@@ -17,7 +17,7 @@ async function bootstrap() {
   app.use("/demo", json());
   app.use("/demo", urlencoded({ extended: true }));
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(Number(process.env["PORT"]) || 3000);
 }
 
 void bootstrap();

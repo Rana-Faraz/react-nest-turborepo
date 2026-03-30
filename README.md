@@ -17,6 +17,7 @@ Monorepo for a NestJS API, React web app, and Bun-based BullMQ worker.
 - `packages/types`: shared TypeScript exports
 - `packages/email`: React Email templates and preview tooling
 - `packages/typescript-config`: shared TS config
+- `packages/eslint-config`: currently reserved for shared lint-config work
 
 ## Requirements
 
@@ -60,6 +61,32 @@ pnpm check-types
 pnpm format
 ```
 
+## TypeScript Baseline
+
+Shared compiler defaults live in:
+
+- `packages/typescript-config/base.json`
+
+Current shared defaults include:
+
+- `module` / `moduleResolution`: `NodeNext`
+- declaration output enabled
+- `noUncheckedIndexedAccess: true`
+- `strict: false` in the shared base
+
+This means the repo has a shared TypeScript baseline, but it is not yet running the strictest possible compiler profile globally. Individual apps and packages can still layer stricter compiler flags on top of that base in their own `tsconfig` files.
+
+## Linting Status
+
+Linting is currently workspace-scoped rather than fully unified at the repo root.
+
+- `apps/web` has a flat ESLint config in `apps/web/eslint.config.js` using `@eslint/js`, `typescript-eslint`, and the React plugin stack.
+- `apps/backend` exposes a `lint` script in `apps/backend/package.json` and declares a Nest/TypeScript ESLint toolchain in that workspace.
+- `apps/worker` does not currently have a dedicated ESLint config; its `lint` script delegates to type-checking.
+- `packages/contracts`, `packages/jobs`, and `packages/types` expose `lint` scripts, but linting is not yet centralized through a shared repo-wide config package.
+
+If you want a single lint entrypoint across the monorepo, that shared package/config wiring still needs to be finished in code.
+
 ## Scoped Commands
 
 ### Backend
@@ -67,6 +94,7 @@ pnpm format
 ```bash
 pnpm --filter backend dev
 pnpm --filter backend build
+pnpm --filter backend lint
 pnpm --filter backend test
 ```
 
@@ -75,6 +103,7 @@ pnpm --filter backend test
 ```bash
 pnpm --filter web dev
 pnpm --filter web build
+pnpm --filter web lint
 pnpm --filter web test
 ```
 
@@ -84,6 +113,7 @@ pnpm --filter web test
 pnpm --filter worker dev
 pnpm --filter worker build
 pnpm --filter worker check-types
+pnpm --filter worker lint
 pnpm --filter worker test
 ```
 
@@ -93,6 +123,9 @@ pnpm --filter worker test
 pnpm --filter @repo/contracts build
 pnpm --filter @repo/jobs build
 pnpm --filter @repo/types build
+pnpm --filter @repo/contracts lint
+pnpm --filter @repo/jobs lint
+pnpm --filter @repo/types lint
 pnpm --filter transactional dev
 ```
 

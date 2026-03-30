@@ -10,6 +10,12 @@
     "check-types": {
       "dependsOn": ["^check-types"]
     },
+    "knip": {},
+    "lint": {},
+    "test": {
+      "dependsOn": ["^test"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "apps/backend/src/**/*.spec.ts"]
+    },
     "dev": {
       "dependsOn": ["^build"],
       "cache": false,

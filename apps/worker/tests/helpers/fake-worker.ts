@@ -1,18 +1,22 @@
-export type WorkerListener = (...args: unknown[]) => void;
+import type { WorkerEventName, WorkerEventTarget } from "../../src/worker";
+
+type RegisteredWorkerListener = (...args: unknown[]) => void;
 
 export function createFakeWorkerEventTarget() {
-  const events: string[] = [];
-  const listeners = new Map<string, WorkerListener>();
+  const events: WorkerEventName[] = [];
+  const listeners = new Map<WorkerEventName, RegisteredWorkerListener>();
+
+  const target: WorkerEventTarget = {
+    on(event, listener) {
+      events.push(event);
+      listeners.set(event, listener as RegisteredWorkerListener);
+      return this;
+    },
+  };
 
   return {
     events,
     listeners,
-    target: {
-      on(event: string, listener: WorkerListener) {
-        events.push(event);
-        listeners.set(event, listener);
-        return this;
-      },
-    },
+    target,
   };
 }

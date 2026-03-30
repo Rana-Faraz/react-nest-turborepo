@@ -3,12 +3,16 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
+    "knip": "turbo run knip",
     "dev": "turbo run dev",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "init:project": "node ./scripts/init-project.mjs"
   },
   "devDependencies": {
+    "knip": "^6.1.0",
     "prettier": "^3.6.2",
     "turbo": "^2.5.8",
     "typescript": "5.9.2"

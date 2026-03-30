@@ -16,7 +16,7 @@ export const API_BASE_URL = (
   import.meta.env["VITE_API_URL"] || "http://localhost:3000"
 ).replace(/\/$/, "");
 
-export class ApiError extends Error {
+class ApiError extends Error {
   readonly statusCode: number;
   readonly code: string;
   readonly fieldErrors: ApiErrorResponse["error"]["fieldErrors"];
@@ -34,7 +34,7 @@ export class ApiError extends Error {
   }
 }
 
-export type ApiRequestOptions<TBody = unknown> = Omit<
+type ApiRequestOptions<TBody = unknown> = Omit<
   AxiosRequestConfig<TBody>,
   "baseURL" | "url" | "method" | "data"
 > & {
@@ -125,7 +125,7 @@ export function asApiError(error: unknown): ApiError {
   );
 }
 
-export const apiClient = axios.create({
+const apiClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
   timeout: 10000,

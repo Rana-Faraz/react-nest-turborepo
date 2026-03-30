@@ -9,7 +9,8 @@
     "build": "tsup",
     "check-types": "tsc --noEmit -p tsconfig.json",
     "dev": "tsup --watch --no-clean",
-    "lint": "eslint . --max-warnings 0"
+    "knip": "pnpm --dir ../.. exec knip --workspace @repo/jobs",
+    "lint": "eslint \"src/**/*.ts\" --max-warnings 0"
   },
   "exports": {
     ".": {
@@ -27,9 +28,11 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^24.7.2",
     "eslint": "^9.37.0",
+    "knip": "^6.1.0",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
   }

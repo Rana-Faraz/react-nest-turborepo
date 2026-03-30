@@ -1,9 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { type Job } from "bullmq";
-import {
-  createJobHandler,
-  registerWorkerEventLogging,
-} from "../../src/worker";
+import { createJobHandler, registerWorkerEventLogging } from "../../src/worker";
 import { createFakeWorkerEventTarget } from "../helpers/fake-worker";
 import { createLoggerSpy } from "../helpers/logger-spy";
 
@@ -12,13 +9,11 @@ describe("createJobHandler", () => {
     const { calls, logger } = createLoggerSpy();
     const handler = createJobHandler(logger);
 
-    await handler(
-      {
-        id: "42",
-        name: "rebuild-bracket",
-        data: undefined,
-      } as Job<unknown>,
-    );
+    await handler({
+      id: "42",
+      name: "rebuild-bracket",
+      data: undefined,
+    } as Job<unknown>);
 
     expect(calls.info).toEqual(["Received job 42 (rebuild-bracket)"]);
   });
@@ -31,7 +26,12 @@ describe("registerWorkerEventLogging", () => {
 
     registerWorkerEventLogging(fakeWorker.target, logger);
 
-    expect(fakeWorker.events).toEqual(["active", "completed", "failed", "error"]);
+    expect(fakeWorker.events).toEqual([
+      "active",
+      "completed",
+      "failed",
+      "error",
+    ]);
     expect(fakeWorker.listeners.size).toBe(4);
   });
 

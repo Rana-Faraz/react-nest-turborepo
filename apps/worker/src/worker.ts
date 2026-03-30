@@ -1,4 +1,4 @@
-import { type Job, Worker } from "bullmq";
+import { type WorkerListener as BullMQWorkerListener, Worker } from "bullmq";
 import type { WorkerConfig } from "./config";
 import { createWorkerJobHandler } from "./jobs";
 
@@ -24,27 +24,37 @@ export function createJobHandler(logger: WorkerLogger) {
   return createWorkerJobHandler(logger);
 }
 
-type WorkerEventTarget = {
-  on(event: string, listener: (...args: any[]) => void): unknown;
-};
+export type WorkerEventName = "active" | "completed" | "failed" | "error";
+
+export type WorkerEventListeners = Pick<
+  BullMQWorkerListener<unknown, void, string>,
+  WorkerEventName
+>;
+
+export interface WorkerEventTarget {
+  on(event: "active", listener: WorkerEventListeners["active"]): unknown;
+  on(event: "completed", listener: WorkerEventListeners["completed"]): unknown;
+  on(event: "failed", listener: WorkerEventListeners["failed"]): unknown;
+  on(event: "error", listener: WorkerEventListeners["error"]): unknown;
+}
 
 export function registerWorkerEventLogging(
   worker: WorkerEventTarget,
   logger: WorkerLogger,
 ) {
-  worker.on("active", (job: Job<unknown>) => {
+  worker.on("active", (job) => {
     logger.debug(`Job ${job.id} is active`);
   });
 
-  worker.on("completed", (job: Job<unknown>) => {
+  worker.on("completed", (job) => {
     logger.debug(`Job ${job.id} completed`);
   });
 
-  worker.on("failed", (job: Job<unknown> | undefined, error: Error) => {
+  worker.on("failed", (job, error) => {
     logger.error(`Job ${job?.id ?? "unknown"} failed: ${error.message}`, error);
   });
 
-  worker.on("error", (error: Error) => {
+  worker.on("error", (error) => {
     logger.error(`Worker error: ${error.message}`, error);
   });
 }

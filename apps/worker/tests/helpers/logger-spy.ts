@@ -1,6 +1,6 @@
 import type { WorkerLogger } from "../../src/worker";
 
-export interface LoggerSpyCalls {
+interface LoggerSpyCalls {
   info: string[];
   debug: string[];
   error: Array<{ message: string; error?: unknown }>;

@@ -1,6 +1,6 @@
-export const DEFAULT_WORKER_NAME = "tournament-worker";
 import { BACKGROUND_TASKS_QUEUE } from "@repo/jobs";
 
+export const DEFAULT_WORKER_NAME = "tournament-worker";
 export const DEFAULT_QUEUE_NAME = BACKGROUND_TASKS_QUEUE.name;
 export const DEFAULT_REDIS_HOST = "localhost";
 export const DEFAULT_REDIS_PORT = 6379;

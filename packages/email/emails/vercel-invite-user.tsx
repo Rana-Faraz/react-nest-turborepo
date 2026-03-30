@@ -136,5 +136,3 @@ export const VercelInviteUserEmail = ({
     </Html>
   );
 };
-
-export default VercelInviteUserEmail;

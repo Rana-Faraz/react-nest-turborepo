@@ -5,9 +5,8 @@ interface ProvidersProps {
   children: ReactNode;
 }
 
-type ProviderComponent<Props extends object = {}> = ComponentType<
-  PropsWithChildren<Props>
->;
+type ProviderComponent<Props extends object = Record<string, never>> =
+  ComponentType<PropsWithChildren<Props>>;
 
 type ProviderEntry<Props extends object> = Readonly<{
   Provider: ProviderComponent<Props>;
@@ -16,7 +15,7 @@ type ProviderEntry<Props extends object> = Readonly<{
 }>;
 
 function defineProvider<Props extends object>(
-  entry: ProviderEntry<Props>,
+  entry: ProviderEntry<Props>
 ): ProviderEntry<Props> {
   return entry;
 }
@@ -38,7 +37,7 @@ export default function Providers({ children }: Readonly<ProvidersProps>) {
         {acc}
       </Provider>
     ),
-    children,
+    children
   );
 
   return <>{nestedProviders}</>;

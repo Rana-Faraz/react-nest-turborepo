@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/api";
 
-export interface HealthResponse {
+interface HealthResponse {
   service: string;
   status: string;
 }

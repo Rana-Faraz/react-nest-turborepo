@@ -17,7 +17,7 @@ function getRequiredEnv(key: string): string {
   return value;
 }
 
-const IS_DEV = process.env.NODE_ENV === "local";
+const isLocal = process.env["NODE_ENV"] === "local";
 const dbHost = getRequiredEnv("DB_HOST");
 const dbUser = getRequiredEnv("DB_USER");
 const dbName = getRequiredEnv("DB_NAME");
@@ -39,7 +39,7 @@ const databaseConfig: DataSourceOptions = {
   // (e.g. CREATE INDEX CONCURRENTLY cannot run inside a transaction).
   migrationsTransactionMode: "each",
   migrations: [__dirname + "/../migrations/*{.ts,.js}"],
-  ...(!IS_DEV
+  ...(!isLocal
     ? {
         ssl: {
           rejectUnauthorized: false,

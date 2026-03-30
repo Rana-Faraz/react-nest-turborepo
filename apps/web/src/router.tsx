@@ -3,7 +3,7 @@ import { queryClient } from "@/lib/query-client";
 import { AppPending, RouterErrorComponent } from "@/router-shell";
 import { routeTree } from "./routeTree.gen";
 
-export const router = createRouter({
+const router = createRouter({
   routeTree,
   context: {
     queryClient,

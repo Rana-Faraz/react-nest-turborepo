@@ -38,18 +38,9 @@ export default createBaseConfig({
       rules: {
         ...reactHooks.configs.recommended.rules,
         "react-compiler/react-compiler": "error",
-        "react-refresh/only-export-components": [
-          "warn",
-          { allowConstantExport: true, allowExportNames: ["Route", "router"] },
-        ],
+        "react-refresh/only-export-components": "off",
         "react/jsx-key": "error",
         "react/jsx-no-duplicate-props": "error",
-      },
-    },
-    {
-      files: ["src/router.tsx", "src/routes/**/*.tsx"],
-      rules: {
-        "react-refresh/only-export-components": "off",
       },
     },
     {

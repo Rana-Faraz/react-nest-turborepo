@@ -20,8 +20,11 @@ export const defaultWorkerLogger: WorkerLogger = {
   },
 };
 
-export function createJobHandler(logger: WorkerLogger) {
-  return createWorkerJobHandler(logger);
+export function createJobHandler(
+  config: WorkerConfig,
+  logger: WorkerLogger,
+) {
+  return createWorkerJobHandler(config, logger);
 }
 
 export type WorkerEventName = "active" | "completed" | "failed" | "error";
@@ -63,7 +66,7 @@ export function createBackgroundWorker(
   config: WorkerConfig,
   logger: WorkerLogger = defaultWorkerLogger,
 ) {
-  const worker = new Worker(config.queueName, createJobHandler(logger), {
+  const worker = new Worker(config.queueName, createJobHandler(config, logger), {
     concurrency: config.concurrency,
     connection: config.redis,
     ...(config.redisQueuePrefix ? { prefix: config.redisQueuePrefix } : {}),

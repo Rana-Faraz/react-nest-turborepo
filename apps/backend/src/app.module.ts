@@ -9,7 +9,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthModule } from "@thallesp/nestjs-better-auth";
 import { createZodValidationPipe, ZodSerializerInterceptor } from "nestjs-zod";
 import { ZodError } from "zod";
-import { auth } from "./lib/auth";
+import { createAuth } from "./lib/auth";
+import { BackgroundJobsModule } from "./modules/background-jobs/background-jobs.module";
+import { BackgroundJobsService } from "./modules/background-jobs/background-jobs.service";
 import { DemoModule } from "./modules/demo/demo.module";
 
 const AppZodValidationPipe = createZodValidationPipe({
@@ -48,7 +50,15 @@ const AppZodValidationPipe = createZodValidationPipe({
       },
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
-    AuthModule.forRoot({ auth, disableGlobalAuthGuard: true }),
+    BackgroundJobsModule,
+    AuthModule.forRootAsync({
+      imports: [BackgroundJobsModule],
+      inject: [BackgroundJobsService],
+      disableGlobalAuthGuard: true,
+      useFactory: (backgroundJobsService: BackgroundJobsService) => ({
+        auth: createAuth(backgroundJobsService),
+      }),
+    }),
     DemoModule,
     HealthModule,
   ],

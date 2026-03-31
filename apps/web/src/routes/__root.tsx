@@ -2,11 +2,7 @@ import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { Outlet, createRootRouteWithContext } from "@tanstack/react-router";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import {
-  AppErrorState,
-  AppPending,
-  NotFoundComponent,
-} from "@/router-shell";
+import { AppErrorState, AppPending, NotFoundComponent } from "@/router-shell";
 import type { RouterContext } from "@/router-context";
 
 function RootRouteComponent() {

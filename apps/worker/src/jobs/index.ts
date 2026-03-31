@@ -1,16 +1,28 @@
+import type { WorkerConfig } from "../config";
+import { createResendClientProvider } from "../email/resend-email-sender";
 import type { WorkerLogger } from "../worker";
 import { createLogMessageJobDefinition } from "./log-message.job";
+import { createSendVerificationEmailJobDefinition } from "./send-verification-email.job";
 import type { WorkerJob, WorkerJobDefinition, WorkerJobHandler } from "./types";
 
-function createJobDefinitions(logger: WorkerLogger): WorkerJobDefinition[] {
-  return [createLogMessageJobDefinition(logger)];
+function createJobDefinitions(
+  config: WorkerConfig,
+  logger: WorkerLogger,
+): WorkerJobDefinition[] {
+  const getResendClient = createResendClientProvider(config);
+
+  return [
+    createLogMessageJobDefinition(logger),
+    createSendVerificationEmailJobDefinition(config, logger, getResendClient),
+  ];
 }
 
 export function createWorkerJobHandler(
+  config: WorkerConfig,
   logger: WorkerLogger,
 ): WorkerJobHandler {
   const jobsByName = new Map(
-    createJobDefinitions(logger).map((jobDefinition) => [
+    createJobDefinitions(config, logger).map((jobDefinition) => [
       jobDefinition.name,
       jobDefinition.handle,
     ]),

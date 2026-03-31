@@ -22,6 +22,7 @@ describe("loadWorkerConfig", () => {
         port: DEFAULT_REDIS_PORT,
         db: DEFAULT_REDIS_DB,
       },
+      email: {},
     });
   });
 
@@ -35,6 +36,9 @@ describe("loadWorkerConfig", () => {
       REDIS_DB: "2",
       REDIS_PASSWORD: "secret",
       REDIS_QUEUE_PREFIX: "prod",
+      RESEND_API_KEY: "re_test_123",
+      RESEND_FROM_EMAIL: "noreply@example.com",
+      RESEND_REPLY_TO_EMAIL: "support@example.com",
     });
 
     expect(config).toEqual({
@@ -48,6 +52,11 @@ describe("loadWorkerConfig", () => {
         password: "secret",
       },
       redisQueuePrefix: "prod",
+      email: {
+        resendApiKey: "re_test_123",
+        from: "noreply@example.com",
+        replyTo: "support@example.com",
+      },
     });
   });
 

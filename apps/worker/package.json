@@ -18,8 +18,11 @@
     "test:watch": "bun test ./tests/unit --watch"
   },
   "dependencies": {
+    "@repo/emails": "workspace:^",
     "@repo/jobs": "workspace:*",
-    "bullmq": "^5.61.0"
+    "bullmq": "^5.61.0",
+    "react": "^19.2.1",
+    "resend": "^6.10.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

@@ -165,9 +165,13 @@ Shared queue names and job definitions live in:
 - `packages/jobs/src/background-tasks.ts`
 
 Each shared job is defined as an object with a `name` and `validate` schema,
-exported with constant-style names such as `BACKGROUND_TASKS_QUEUE` and
-`LOG_MESSAGE_JOB`, so backend producers and worker consumers use the same
-contract boundary.
+exported with constant-style names such as `BACKGROUND_TASKS_QUEUE`,
+`LOG_MESSAGE_JOB`, and `SEND_VERIFICATION_EMAIL_JOB`, so backend producers and
+worker consumers use the same contract boundary.
+
+The worker supports `send.verification-email`, which renders the verification
+template from `@repo/emails` and sends it through Resend when
+`RESEND_API_KEY` and `RESEND_FROM_EMAIL` are configured.
 
 Full background-jobs documentation lives in:
 

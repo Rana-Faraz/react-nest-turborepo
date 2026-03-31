@@ -2,13 +2,29 @@
   "name": "@repo/emails",
   "version": "1.0.0",
   "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsup",
     "check-types": "tsc --noEmit -p tsconfig.json",
     "dev": "email dev -p 3001",
     "export": "email export",
     "knip": "pnpm --dir ../.. exec knip --workspace @repo/emails",
-    "lint": "eslint \"emails/**/*.tsx\" --max-warnings 0",
+    "lint": "eslint \"emails/**/*.tsx\" \"src/**/*.{ts,tsx}\" --max-warnings 0",
     "start": "email start -p 3001"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
   },
   "dependencies": {
     "@react-email/components": "1.0.1",
@@ -23,6 +39,7 @@
     "@types/react-dom": "19.2.3",
     "eslint": "^9.37.0",
     "knip": "^6.1.0",
-    "react-email": "5.0.7"
+    "react-email": "5.0.7",
+    "tsup": "^8.5.0"
   }
 }

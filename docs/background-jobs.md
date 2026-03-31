@@ -33,9 +33,26 @@ Right now there is one queue:
 
 - `background-tasks`
 
-Right now there is one job:
+Right now there are two jobs:
 
 - `log.message`
+- `send.verification-email`
+
+`send.verification-email` is a dedicated verification-email path. The shared
+payload supports:
+
+- `email`
+- `name`: optional recipient name
+- `productName`: optional product label for subject/body copy
+- `verificationUrl`
+- `expiresInHours`
+- `supportEmail`
+- `idempotencyKey`: optional explicit Resend idempotency key
+
+The worker sends that job through Resend using the React Email template in
+`packages/email/src/verification-email.tsx`.
+If `idempotencyKey` is omitted, the worker derives one from the BullMQ job id
+so retries do not create duplicate sends within Resend's idempotency window.
 
 Shared queue definitions belong in `packages/jobs/src`.
 
@@ -86,6 +103,29 @@ If you add a new job:
 2. Add a new job file in `apps/worker/src/jobs`
 3. Register it in `apps/worker/src/jobs/index.ts`
 4. Add a unit test under `apps/worker/tests/unit/jobs`
+
+## Email Configuration
+
+Verification email delivery uses Resend from within the worker process.
+
+Worker configuration is split by concern under:
+
+- `apps/worker/src/config/worker.config.ts`
+- `apps/worker/src/config/redis.config.ts`
+- `apps/worker/src/config/email.config.ts`
+
+Required worker environment variables:
+
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL`
+
+Optional worker environment variable:
+
+- `RESEND_REPLY_TO_EMAIL`
+
+The verification-email job treats request validation, authentication, and
+authorization failures as non-retryable and discards those BullMQ jobs before
+surfacing the failure. Rate-limit and API failures remain retryable.
 
 ## Local Development
 

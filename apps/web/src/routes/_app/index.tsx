@@ -200,7 +200,7 @@ function HomeRouteComponent() {
   );
 }
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_app/")({
   loader: async ({ context }) => {
     await Promise.all([
       context.queryClient.ensureQueryData(healthQueryOptions()),

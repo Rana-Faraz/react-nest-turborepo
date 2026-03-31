@@ -1,5 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { type Job } from "bullmq";
+import { loadWorkerConfig } from "../../src/config";
 import { createJobHandler, registerWorkerEventLogging } from "../../src/worker";
 import { createFakeWorkerEventTarget } from "../helpers/fake-worker";
 import { createLoggerSpy } from "../helpers/logger-spy";
@@ -7,7 +8,7 @@ import { createLoggerSpy } from "../helpers/logger-spy";
 describe("createJobHandler", () => {
   it("logs the received job details", async () => {
     const { calls, logger } = createLoggerSpy();
-    const handler = createJobHandler(logger);
+    const handler = createJobHandler(loadWorkerConfig({}), logger);
 
     await handler({
       id: "42",

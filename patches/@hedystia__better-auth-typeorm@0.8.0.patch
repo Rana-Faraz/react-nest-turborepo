@@ -1,0 +1,155 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index ba29185af70672b64d2a21aba288f0a14b0cc9da..7e4954dc097cc9e11f1c37835a5ac7e8508fb763 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -19,6 +19,18 @@ function tryGetRepository(dataSource, tableName, requiredFields) {
+ function escapeId(dataSource, name) {
+ 	return dataSource.driver.escape(name);
+ }
++function createParameterToken(dataSource, index) {
++	return dataSource.driver.createParameter(`orm_param_${index}`, index);
++}
++function pushParameter(dataSource, params, value, startIndex = 0) {
++	params.push(value);
++	return createParameterToken(dataSource, startIndex + params.length - 1);
++}
++function normalizeQueryValue(value) {
++	if (value instanceof Date) return value.toISOString();
++	if (typeof value === "object" && value !== null) return JSON.stringify(value);
++	return value;
++}
+ async function ensureTableExists(dataSource, tableName, data) {
+ 	const queryRunner = dataSource.createQueryRunner();
+ 	await queryRunner.connect();
+@@ -27,7 +39,7 @@ async function ensureTableExists(dataSource, tableName, data) {
+ 			const columns = Object.entries(data).map(([key, value]) => {
+ 				const escaped = escapeId(dataSource, key);
+ 				if (key === "id") return `${escaped} text PRIMARY KEY`;
+-				return `${escaped} ${typeof value === "boolean" ? "boolean" : typeof value === "number" ? "integer" : value instanceof Date ? "datetime" : "text"}`;
++				return `${escaped} ${typeof value === "boolean" ? "boolean" : typeof value === "number" ? "integer" : value instanceof Date ? getDateColumnType(dataSource) : "text"}`;
+ 			}).join(", ");
+ 			await queryRunner.query(`CREATE TABLE IF NOT EXISTS ${escapeId(dataSource, tableName)} (${columns})`);
+ 		} else {
+@@ -35,7 +47,7 @@ async function ensureTableExists(dataSource, tableName, data) {
+ 			if (table) {
+ 				const existingColumns = new Set(table.columns.map((col) => col.name));
+ 				for (const [key, value] of Object.entries(data)) if (!existingColumns.has(key)) {
+-					const type = typeof value === "boolean" ? "boolean" : typeof value === "number" ? "integer" : value instanceof Date ? "datetime" : "text";
++					const type = typeof value === "boolean" ? "boolean" : typeof value === "number" ? "integer" : value instanceof Date ? getDateColumnType(dataSource) : "text";
+ 					await queryRunner.query(`ALTER TABLE ${escapeId(dataSource, tableName)} ADD COLUMN ${escapeId(dataSource, key)} ${type}`);
+ 				}
+ 			}
+@@ -313,11 +325,11 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 			} else result = await repository.delete(findOptions);
+ 			return result;
+ 		}
+-		function buildWhereSql(model, action, where) {
+-			const cleaned = where?.length ? transformWhereClause({
+-				model,
+-				where,
+-				action
++			function buildWhereSql(model, action, where, startIndex = 0) {
++				const cleaned = where?.length ? transformWhereClause({
++					model,
++					where,
++					action
+ 			}) : [];
+ 			if (!cleaned.length) return {
+ 				sql: "",
+@@ -334,10 +346,7 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 				});
+ 				if (fieldMapCache[model]?.[w.field]) mappedFieldName = fieldMapCache[model][w.field];
+ 				const col = escapeId(dataSource, mappedFieldName);
+-				const push = (value) => {
+-					params.push(value);
+-					return "?";
+-				};
++					const push = (value) => pushParameter(dataSource, params, value, startIndex);
+ 				switch (w.operator ?? "eq") {
+ 					case "eq":
+ 						parts.push(`${prefix}${col} = ${push(w.value)}`);
+@@ -455,8 +464,8 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 			else Object.assign(insertData, mappedData);
+ 			const entries = Object.entries(insertData).filter(([, value]) => value !== void 0);
+ 			const columns = entries.map(([key]) => escapeId(dataSource, key)).join(", ");
+-			const placeholders = entries.map(() => "?").join(", ");
+-			const values = entries.map(([, value]) => value instanceof Date ? value.toISOString() : value);
++				const placeholders = entries.map((_, index) => createParameterToken(dataSource, index)).join(", ");
++				const values = entries.map(([, value]) => normalizeQueryValue(value));
+ 			try {
+ 				const isSqlite = dataSource.options.type === "sqlite" || dataSource.options.type === "better-sqlite3";
+ 				if (isSqlite) await queryRunner.query("PRAGMA foreign_keys = OFF");
+@@ -466,7 +475,7 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 				} finally {
+ 					if (isSqlite) await queryRunner.query("PRAGMA foreign_keys = ON");
+ 				}
+-				const rows = await queryRunner.query(`SELECT * FROM ${escapeId(dataSource, tableName)} WHERE ${escapeId(dataSource, "id")} = ?`, [mappedData.id]);
++					const rows = await queryRunner.query(`SELECT * FROM ${escapeId(dataSource, tableName)} WHERE ${escapeId(dataSource, "id")} = ${createParameterToken(dataSource, 0)}`, [mappedData.id]);
+ 				if (rows[0]) {
+ 					const reverseFieldMap = {};
+ 					for (const [originalKey, mappedKey] of Object.entries(createFieldMap)) reverseFieldMap[mappedKey] = originalKey;
+@@ -548,12 +557,12 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 				if (!existing[0]) return null;
+ 				const setClauses = [];
+ 				const setValues = [];
+-				for (const [key, value] of Object.entries(transformed)) if (value !== void 0) {
+-					setClauses.push(`${escapeId(dataSource, key)} = ?`);
+-					setValues.push(value instanceof Date ? value.toISOString() : value);
+-				}
+-				if (setClauses.length > 0) await queryRunner.query(`UPDATE ${escapeId(dataSource, tableName)} SET ${setClauses.join(", ")} WHERE ${escapeId(dataSource, "id")} = ?`, [...setValues, existing[0].id]);
+-				const result = await queryRunner.query(`SELECT * FROM ${escapeId(dataSource, tableName)} WHERE ${escapeId(dataSource, "id")} = ?`, [existing[0].id]);
++					for (const [key, value] of Object.entries(transformed)) if (value !== void 0) {
++						setClauses.push(`${escapeId(dataSource, key)} = ${createParameterToken(dataSource, setValues.length)}`);
++						setValues.push(normalizeQueryValue(value));
++					}
++					if (setClauses.length > 0) await queryRunner.query(`UPDATE ${escapeId(dataSource, tableName)} SET ${setClauses.join(", ")} WHERE ${escapeId(dataSource, "id")} = ${createParameterToken(dataSource, setValues.length)}`, [...setValues, existing[0].id]);
++					const result = await queryRunner.query(`SELECT * FROM ${escapeId(dataSource, tableName)} WHERE ${escapeId(dataSource, "id")} = ${createParameterToken(dataSource, 0)}`, [existing[0].id]);
+ 				if (result[0]) return await transformOutput(result[0], defaultModelName);
+ 				return null;
+ 			} finally {
+@@ -587,19 +596,20 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 			const defaultModelName = getDefaultModelName(model);
+ 			const tableName = getModelName(model);
+ 			const transformed = await transformInput(update, defaultModelName, "update");
+-			const { sql: whereSql, params: whereParams } = buildWhereSql(model, "updateMany", where);
+-			const setClauses = [];
+-			const setValues = [];
+-			for (const [key, value] of Object.entries(transformed)) if (value !== void 0) {
+-				setClauses.push(`${escapeId(dataSource, key)} = ?`);
+-				setValues.push(value instanceof Date ? value.toISOString() : value);
+-			}
+-			if (setClauses.length === 0) return 0;
+-			const queryRunner = dataSource.createQueryRunner();
+-			await queryRunner.connect();
+-			try {
+-				const result = await queryRunner.query(`UPDATE ${escapeId(dataSource, tableName)} SET ${setClauses.join(", ")}${whereSql}`, [...setValues, ...whereParams]);
+-				return typeof result?.changes === "number" ? result.changes : 0;
++				const setClauses = [];
++				const setValues = [];
++				for (const [key, value] of Object.entries(transformed)) if (value !== void 0) {
++					setClauses.push(`${escapeId(dataSource, key)} = ${createParameterToken(dataSource, setValues.length)}`);
++					setValues.push(normalizeQueryValue(value));
++				}
++				if (setClauses.length === 0) return 0;
++				const { sql: whereSql, params: whereParams } = buildWhereSql(model, "updateMany", where, setValues.length);
++				const queryRunner = dataSource.createQueryRunner();
++				await queryRunner.connect();
++				try {
++					const result = await queryRunner.query(`UPDATE ${escapeId(dataSource, tableName)} SET ${setClauses.join(", ")}${whereSql}`, [...setValues, ...whereParams], true);
++					if (typeof result?.affected === "number") return result.affected;
++					return typeof result?.changes === "number" ? result.changes : 0;
+ 			} finally {
+ 				await queryRunner.release();
+ 			}
+@@ -610,8 +620,9 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 			const queryRunner = dataSource.createQueryRunner();
+ 			await queryRunner.connect();
+ 			try {
+-				const result = await queryRunner.query(`DELETE FROM ${escapeId(dataSource, tableName)}${sql}`, params);
+-				return typeof result?.changes === "number" ? result.changes : 0;
++					const result = await queryRunner.query(`DELETE FROM ${escapeId(dataSource, tableName)}${sql}`, params, true);
++					if (typeof result?.affected === "number") return result.affected;
++					return typeof result?.changes === "number" ? result.changes : 0;
+ 			} finally {
+ 				await queryRunner.release();
+ 			}

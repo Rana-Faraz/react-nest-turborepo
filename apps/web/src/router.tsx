@@ -1,12 +1,14 @@
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { queryClient } from "@/lib/query-client";
 import { AppPending, RouterErrorComponent } from "@/router-shell";
+import { sessionQueryOptions } from "@/queries/auth";
 import { routeTree } from "./routeTree.gen";
 
-const router = createRouter({
+export const router = createRouter({
   routeTree,
   context: {
     queryClient,
+    auth: null,
   },
   defaultPreload: "intent",
   defaultPendingComponent: AppPending,
@@ -21,5 +23,9 @@ declare module "@tanstack/react-router" {
 }
 
 export function AppRouterProvider() {
-  return <RouterProvider router={router} />;
+  const session = queryClient.getQueryData(sessionQueryOptions().queryKey);
+
+  return (
+    <RouterProvider router={router} context={{ auth: session ?? null }} />
+  );
 }

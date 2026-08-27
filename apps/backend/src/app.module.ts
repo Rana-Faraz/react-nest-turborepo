@@ -1,27 +1,14 @@
-import { createValidationErrorResponse } from "@repo/contracts";
 import { BullModule } from "@nestjs/bullmq";
-import { BadRequestException, Module } from "@nestjs/common";
+import { Module, StandardSchemaSerializerInterceptor } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
-import { HealthModule } from "./modules/health/health.module";
-import { typeOrmAsyncConfig } from "./config/typeorm.config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { AuthModule } from "@thallesp/nestjs-better-auth";
-import { createZodValidationPipe, ZodSerializerInterceptor } from "nestjs-zod";
-import { ZodError } from "zod";
-import { createAuth } from "./lib/auth";
-import { BackgroundJobsModule } from "./modules/background-jobs/background-jobs.module";
-import { BackgroundJobsService } from "./modules/background-jobs/background-jobs.service";
-import { DemoModule } from "./modules/demo/demo.module";
-
-const AppZodValidationPipe = createZodValidationPipe({
-  createValidationException: (error) => {
-    const issues = error instanceof ZodError ? error.issues : [];
-
-    return new BadRequestException(createValidationErrorResponse(issues));
-  },
-  strictSchemaDeclaration: true,
-});
+import { AppValidationPipe } from "./common/http/app-validation.pipe.js";
+import { typeOrmAsyncConfig } from "./config/typeorm.config.js";
+import { AuthModule } from "./modules/auth/auth.module.js";
+import { BackgroundJobsModule } from "./modules/background-jobs/background-jobs.module.js";
+import { DemoModule } from "./modules/demo/demo.module.js";
+import { HealthModule } from "./modules/health/health.module.js";
 
 @Module({
   imports: [
@@ -51,25 +38,18 @@ const AppZodValidationPipe = createZodValidationPipe({
     }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     BackgroundJobsModule,
-    AuthModule.forRootAsync({
-      imports: [BackgroundJobsModule],
-      inject: [BackgroundJobsService],
-      disableGlobalAuthGuard: true,
-      useFactory: (backgroundJobsService: BackgroundJobsService) => ({
-        auth: createAuth(backgroundJobsService),
-      }),
-    }),
+    AuthModule,
     DemoModule,
     HealthModule,
   ],
   providers: [
     {
       provide: APP_PIPE,
-      useClass: AppZodValidationPipe,
+      useClass: AppValidationPipe,
     },
     {
       provide: APP_INTERCEPTOR,
-      useClass: ZodSerializerInterceptor,
+      useClass: StandardSchemaSerializerInterceptor,
     },
   ],
 })

@@ -6,7 +6,7 @@ Monorepo for a NestJS API, React web app, and Bun-based BullMQ worker.
 
 ### Apps
 
-- `apps/backend`: NestJS API with TypeORM, Better Auth, `nestjs-zod`, and BullMQ producers
+- `apps/backend`: NestJS API with TypeORM, Better Auth, native Standard Schema validation, and BullMQ producers
 - `apps/web`: React 19 + Vite + TanStack Router + TanStack Query
 - `apps/worker`: Bun runtime worker that consumes BullMQ jobs
 
@@ -14,16 +14,15 @@ Monorepo for a NestJS API, React web app, and Bun-based BullMQ worker.
 
 - `packages/contracts`: shared Zod schemas plus API and error contracts
 - `packages/jobs`: shared queue definitions and job payload validation
-- `packages/types`: shared TypeScript exports
 - `packages/email`: React Email templates and preview tooling
 - `packages/typescript-config`: shared TS config
-- `packages/eslint-config`: currently reserved for shared lint-config work
+- `packages/eslint-config`: shared ESLint flat config
 
 ## Requirements
 
-- Node `>=22`
-- `pnpm@9`
-- Docker Desktop or Docker Engine for local Redis / QueueDash / MinIO
+- Node `>=24.15 <25` (the current Node 24 LTS line)
+- `pnpm@11.24.0`
+- Docker Desktop or Docker Engine for local PostgreSQL / Redis / QueueDash / MinIO
 - Bun installed locally for direct worker runtime usage
 
 ## Install
@@ -31,6 +30,41 @@ Monorepo for a NestJS API, React web app, and Bun-based BullMQ worker.
 ```bash
 pnpm install
 ```
+
+## Local Environment
+
+Environment variables are owned by the app that consumes them. On a fresh
+clone, create the local files from the runnable examples:
+
+```bash
+cp apps/backend/.env.example apps/backend/.env
+cp apps/web/.env.example apps/web/.env
+cp apps/worker/.env.example apps/worker/.env
+```
+
+The checked-in examples match the local Docker defaults. After copying the
+backend example, replace `BETTER_AUTH_SECRET` with the output of
+`openssl rand -hex 32`. Never reuse a local secret in a deployed environment.
+
+Resend is optional for normal local startup. To deliver verification emails,
+set `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, and optionally
+`RESEND_REPLY_TO_EMAIL` in `apps/worker/.env`. Without them, email jobs fail
+with a clear configuration error while the rest of the stack remains usable.
+
+Start the required database and queue infrastructure, then the app graph:
+
+```bash
+docker compose up -d postgres redis queuedash
+pnpm dev
+```
+
+Backend migrations run automatically on startup. Local endpoints:
+
+- Web: http://localhost:5173
+- Backend: http://localhost:3000
+- QueueDash: http://localhost:3100
+- PostgreSQL: `localhost:5432`
+- Redis: `localhost:6379`
 
 ## Template Init
 
@@ -72,20 +106,17 @@ Current shared defaults include:
 - `module` / `moduleResolution`: `NodeNext`
 - declaration output enabled
 - `noUncheckedIndexedAccess: true`
-- `strict: false` in the shared base
+- `strict: true` in the shared base
 
-This means the repo has a shared TypeScript baseline, but it is not yet running the strictest possible compiler profile globally. Individual apps and packages can still layer stricter compiler flags on top of that base in their own `tsconfig` files.
+TypeScript 7 is the command-line compiler. TypeScript 6 is installed beside it
+under the `typescript` package name so tools that still use the compiler API,
+such as `typescript-eslint`, remain compatible.
 
 ## Linting Status
 
-Linting is currently workspace-scoped rather than fully unified at the repo root.
-
-- `apps/web` has a flat ESLint config in `apps/web/eslint.config.js` using `@eslint/js`, `typescript-eslint`, and the React plugin stack.
-- `apps/backend` exposes a `lint` script in `apps/backend/package.json` and declares a Nest/TypeScript ESLint toolchain in that workspace.
-- `apps/worker` does not currently have a dedicated ESLint config; its `lint` script delegates to type-checking.
-- `packages/contracts`, `packages/jobs`, and `packages/types` expose `lint` scripts, but linting is not yet centralized through a shared repo-wide config package.
-
-If you want a single lint entrypoint across the monorepo, that shared package/config wiring still needs to be finished in code.
+Every app and source package extends the flat config from
+`packages/eslint-config`. Run all workspace linters with `pnpm lint`, or use a
+workspace's scoped `lint` command while developing.
 
 ## Scoped Commands
 
@@ -122,17 +153,18 @@ pnpm --filter worker test
 ```bash
 pnpm --filter @repo/contracts build
 pnpm --filter @repo/jobs build
-pnpm --filter @repo/types build
+pnpm --filter @repo/emails build
 pnpm --filter @repo/contracts lint
 pnpm --filter @repo/jobs lint
-pnpm --filter @repo/types lint
-pnpm --filter transactional dev
+pnpm --filter @repo/emails lint
+pnpm --filter @repo/emails dev
 ```
 
 ## Local Infrastructure
 
 This repo includes local Docker services for:
 
+- PostgreSQL
 - Redis
 - QueueDash
 - MinIO
@@ -140,7 +172,7 @@ This repo includes local Docker services for:
 Start them with:
 
 ```bash
-docker compose up -d redis queuedash minio
+docker compose up -d postgres redis queuedash minio
 ```
 
 Useful local URLs:

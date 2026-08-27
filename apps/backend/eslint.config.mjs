@@ -1,9 +1,9 @@
 import {
   createBaseConfig,
-  jestGlobals,
-  jestPlugin,
   noOnlyTestsPlugin,
   nodeGlobals,
+  vitestGlobals,
+  vitestPlugin,
 } from "@repo/eslint-config";
 
 export default createBaseConfig({
@@ -13,14 +13,14 @@ export default createBaseConfig({
     {
       files: ["src/**/*.spec.ts", "src/**/*.test.ts"],
       languageOptions: {
-        globals: jestGlobals,
+        globals: vitestGlobals,
       },
       plugins: {
-        jest: jestPlugin,
         "no-only-tests": noOnlyTestsPlugin,
+        vitest: vitestPlugin,
       },
       rules: {
-        ...(jestPlugin.configs["flat/recommended"]?.rules ?? {}),
+        ...(vitestPlugin.configs.recommended.rules ?? {}),
         "no-only-tests/no-only-tests": "error",
       },
     },

@@ -1,0 +1,301 @@
+diff --git a/dist/index.mjs b/dist/index.mjs
+index f18723f366f8e82e81802ab49f5343bb7dc354ee..450a36a46b5f908ef46ff4a20b0ea4500f48f53d 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
+@@ -173,6 +173,61 @@ function formatDefaultValueForMigration(field) {
+ 	if (typeof field.defaultValue === "number" || typeof field.defaultValue === "boolean") return JSON.stringify(field.defaultValue);
+ 	return null;
+ }
++function getStableIndexNameHash(value) {
++	let hash = 2166136261;
++	for (let index = 0; index < value.length; index++) {
++		hash ^= value.charCodeAt(index);
++		hash = Math.imul(hash, 16777619);
++	}
++	return (hash >>> 0).toString(16).padStart(8, "0");
++}
++function truncateUtf8(value, maxBytes) {
++	let result = "";
++	let byteLength = 0;
++	for (const character of value) {
++		const characterByteLength = new TextEncoder().encode(character).length;
++		if (byteLength + characterByteLength > maxBytes) break;
++		result += character;
++		byteLength += characterByteLength;
++	}
++	return result;
++}
++function getTableIndexName(tableName, index, columns) {
++	if (index.name) return index.name;
++	const indexKind = index.unique || index.isUnique ? "uidx" : "idx";
++	const generatedName = `${tableName}_${columns.join("_")}_${indexKind}`;
++	if (new TextEncoder().encode(generatedName).length <= 63) return generatedName;
++	const suffix = `_${getStableIndexNameHash(generatedName)}_${indexKind}`;
++	return `${truncateUtf8(generatedName.slice(0, -indexKind.length - 1), 63 - new TextEncoder().encode(suffix).length)}${suffix}`;
++}
++function getTableIndexDefinitions(modelSchema) {
++	const tableName = modelSchema.modelName;
++	return (modelSchema.indexes ?? []).map((index) => {
++		const fields = Array.from(index.fields ?? index.columns ?? []);
++		const properties = [];
++		const columns = [];
++		for (const fieldName of fields) {
++			const directField = modelSchema.fields[fieldName];
++			if (directField) {
++				properties.push(fieldName);
++				columns.push(directField.fieldName || fieldName);
++				continue;
++			}
++			const matchingField = Object.entries(modelSchema.fields).find(([, field]) => field.fieldName === fieldName);
++			properties.push(matchingField?.[0] ?? fieldName);
++			columns.push(matchingField?.[1].fieldName ?? fieldName);
++		}
++		return {
++			name: getTableIndexName(tableName, index, columns),
++			properties,
++			columns,
++			isUnique: index.unique ?? index.isUnique ?? false
++		};
++	}).filter((index) => index.columns.length > 0);
++}
++function getMissingTableIndexes(table, modelSchema) {
++	return getTableIndexDefinitions(modelSchema).filter((expected) => !table.indices.some((actual) => actual.isUnique === expected.isUnique && actual.columnNames.length === expected.columns.length && actual.columnNames.every((column, index) => column === expected.columns[index])));
++}
+ function convertOperatorToTypeORM(operator, value) {
+ 	switch (operator) {
+ 		case "ne": return Not(value);
+@@ -206,7 +261,8 @@ function generateEntity(dataSource, modelName, modelSchema, schemas, options) {
+ 	const imports = [`import { ${Array.from(typeormImports).sort().join(", ")} } from 'typeorm';`];
+ 	for (const referencedModel of Array.from(referencedModels).sort()) imports.push(`import { ${toPascalCase(referencedModel)} } from './${toPascalCase(referencedModel)}';`);
+ 	imports.push("");
+-	let entityCode = `@Entity('${tableName}')\nexport class ${className} {\n`;
++	const tableIndexDecorators = getTableIndexDefinitions(modelSchema).map((index) => `@Index('${index.name}', [${index.properties.map((property) => `'${property}'`).join(", ")}]${index.isUnique ? ", { unique: true }" : ""})`).join("\n");
++	let entityCode = `${tableIndexDecorators ? `${tableIndexDecorators}\n` : ""}@Entity('${tableName}')\nexport class ${className} {\n`;
+ 	const primaryColumnType = getPrimaryColumnTypeForModel(dataSource, modelName, schemas, options);
+ 	const primaryColumnOptions = primaryColumnType.length ? `, { length: '${primaryColumnType.length}' }` : "";
+ 	entityCode += `  @PrimaryColumn('${primaryColumnType.type}'${primaryColumnOptions})\n`;
+@@ -302,6 +358,14 @@ ${primaryColumnLength}            isPrimary: true,
+       }),
+     );`);
+ 		}
++		for (const index of getTableIndexDefinitions(modelSchema)) postCreateStatements.push(`    await queryRunner.createIndex(
++      '${tableName}',
++      new TableIndex({
++        name: '${index.name}',
++        columnNames: [${index.columns.map((column) => `'${column}'`).join(", ")}],
++        isUnique: ${index.isUnique},
++      }),
++    );`);
+ 		migrationCode += `${columns.join(",\n")}\n`;
+ 		migrationCode += "        ],\n";
+ 		migrationCode += "      }),\n";
+@@ -350,11 +414,13 @@ ${primaryColumnLength}            isPrimary: true,
+ 			if (defaultValue) migrationCode += `      default: ${defaultValue},\n`;
+ 			migrationCode += "    }));\n\n";
+ 		}
++		if (changes.addIndexes && changes.addIndexes.length > 0) for (const index of changes.addIndexes) migrationCode += `    await queryRunner.createIndex('${tableName}', new TableIndex({ name: '${index.name}', columnNames: [${index.columns.map((column) => `'${column}'`).join(", ")}], isUnique: ${index.isUnique} }));\n\n`;
+ 	}
+ 	migrationCode += "  }\n\n";
+ 	migrationCode += "  public async down(queryRunner: QueryRunner): Promise<void> {\n";
+ 	if (action === "create") migrationCode += `    await queryRunner.dropTable('${tableName}');\n`;
+ 	else if (action === "alter" && changes) {
++		if (changes.addIndexes && changes.addIndexes.length > 0) for (const index of changes.addIndexes) migrationCode += `    await queryRunner.dropIndex('${tableName}', '${index.name}');\n`;
+ 		if (changes.addColumns && changes.addColumns.length > 0) for (const { name, field } of changes.addColumns) migrationCode += `    await queryRunner.dropColumn('${tableName}', '${field.fieldName || name}');\n`;
+ 		if (changes.dropColumns && changes.dropColumns.length > 0) for (const columnName of changes.dropColumns) migrationCode += `    await queryRunner.addColumn('${tableName}', new TableColumn({ name: '${columnName}', type: 'text', isNullable: true }));\n`;
+ 	}
+@@ -479,8 +545,8 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 			} else result = await repository.delete(findOptions);
+ 			return result;
+ 		}
+-		function buildWhereSql(model, action, where, startIndex = 0) {
+-			const cleaned = where?.length ? transformWhereClause({
++		function buildWhereSql(model, action, where, startIndex = 0, alreadyTransformed = false) {
++			const cleaned = where?.length ? alreadyTransformed ? where : transformWhereClause({
+ 				model,
+ 				where,
+ 				action
+@@ -494,11 +560,11 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 			for (let i = 0; i < cleaned.length; i++) {
+ 				const w = cleaned[i];
+ 				const prefix = i === 0 ? "" : ` ${w.connector ?? "AND"} `;
+-				let mappedFieldName = getFieldName({
++				let mappedFieldName = alreadyTransformed ? w.field : getFieldName({
+ 					model,
+ 					field: w.field
+ 				});
+-				if (fieldMapCache[model]?.[w.field]) mappedFieldName = fieldMapCache[model][w.field];
++				if (!alreadyTransformed && fieldMapCache[model]?.[w.field]) mappedFieldName = fieldMapCache[model][w.field];
+ 				const col = escapeId(dataSource, mappedFieldName);
+ 				const isInsensitive = w.mode === "insensitive";
+ 				const colSql = isInsensitive ? `LOWER(${col})` : col;
+@@ -776,6 +842,117 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 				await queryRunner.release();
+ 			}
+ 		}
++		function getAtomicIdColumn(model) {
++			const defaultModelName = getDefaultModelName(model);
++			return schema?.[defaultModelName]?.fields?.id?.fieldName || "id";
++		}
++		async function transformAtomicOutput(model, row) {
++			if (!row) return null;
++			const defaultModelName = getDefaultModelName(model);
++			return await transformOutput(deserializeRow(defaultModelName, row, buildReverseFieldMap(model)), defaultModelName);
++		}
++		function getReturnedRows(result) {
++			if (Array.isArray(result?.records)) return result.records;
++			if (Array.isArray(result?.raw)) {
++				if (Array.isArray(result.raw[0]) && typeof result.raw[1] === "number") return result.raw[0];
++				return result.raw;
++			}
++			if (Array.isArray(result)) {
++				if (Array.isArray(result[0]) && typeof result[1] === "number") return result[0];
++				return result;
++			}
++			return [];
++		}
++		async function rawConsumeOne(model, where) {
++			const tableName = getModelName(model);
++			const tableSql = escapeId(dataSource, tableName);
++			const idColumn = getAtomicIdColumn(model);
++			const idSql = escapeId(dataSource, idColumn);
++			const { sql: whereSql, params: whereParams } = buildWhereSql(model, "consumeOne", where, 0, true);
++			const driverType = dataSource.options.type;
++			const queryRunner = dataSource.createQueryRunner();
++			await queryRunner.connect();
++			try {
++				let rows;
++				if (driverType === "postgres" || driverType === "cockroachdb") rows = getReturnedRows(await queryRunner.query(`WITH candidate AS (SELECT ${idSql} FROM ${tableSql}${whereSql} LIMIT 1 FOR UPDATE) DELETE FROM ${tableSql} AS target USING candidate WHERE target.${idSql} = candidate.${idSql} RETURNING target.*`, whereParams, true));
++				else if (driverType === "mssql") rows = getReturnedRows(await queryRunner.query(`DELETE TOP (1) FROM ${tableSql} OUTPUT DELETED.*${whereSql}`, whereParams, true));
++				else if (driverType === "sqlite" || driverType === "better-sqlite3" || driverType === "sqljs") rows = getReturnedRows(await queryRunner.query(`DELETE FROM ${tableSql} WHERE ${idSql} IN (SELECT ${idSql} FROM ${tableSql}${whereSql} LIMIT 1) RETURNING *`, whereParams, true));
++				else if (driverType === "mysql" || driverType === "mariadb") {
++					await queryRunner.startTransaction();
++					try {
++						const candidates = await queryRunner.query(`SELECT * FROM ${tableSql}${whereSql} LIMIT 1 FOR UPDATE`, whereParams);
++						if (!candidates[0]) {
++							await queryRunner.commitTransaction();
++							return null;
++						}
++						await queryRunner.query(`DELETE FROM ${tableSql} WHERE ${idSql} = ${createParameterToken(dataSource, 0)}`, [candidates[0][idColumn]]);
++						await queryRunner.commitTransaction();
++						return await transformAtomicOutput(model, candidates[0]);
++					} catch (error) {
++						if (queryRunner.isTransactionActive) await queryRunner.rollbackTransaction();
++						throw error;
++					}
++				} else throw new BetterAuthError(`Atomic consumeOne is not supported for TypeORM driver "${driverType}".`);
++				return await transformAtomicOutput(model, rows[0]);
++			} finally {
++				if (queryRunner.isTransactionActive) await queryRunner.rollbackTransaction();
++				await queryRunner.release();
++			}
++		}
++		async function rawIncrementOne(model, where, increment, set) {
++			const tableName = getModelName(model);
++			const tableSql = escapeId(dataSource, tableName);
++			const idColumn = getAtomicIdColumn(model);
++			const idSql = escapeId(dataSource, idColumn);
++			const assignments = [];
++			const updateValues = [];
++			const assignedFields = /* @__PURE__ */ new Set();
++			for (const [field, delta] of Object.entries(increment)) {
++				if (typeof delta !== "number" || !Number.isFinite(delta)) throw new BetterAuthError(`incrementOne requires a finite numeric delta for "${field}".`);
++				const fieldSql = escapeId(dataSource, field);
++				assignments.push(`${fieldSql} = ${fieldSql} + ${pushParameter(dataSource, updateValues, delta)}`);
++				assignedFields.add(field);
++			}
++			for (const [field, value] of Object.entries(set ?? {})) if (value !== void 0) {
++				if (assignedFields.has(field)) throw new BetterAuthError(`incrementOne cannot increment and set "${field}" in the same operation.`);
++				assignments.push(`${escapeId(dataSource, field)} = ${pushParameter(dataSource, updateValues, normalizeQueryValue(value, dataSource))}`);
++				assignedFields.add(field);
++			}
++			if (assignments.length === 0) throw new BetterAuthError("incrementOne resolved to an empty update.");
++			const { sql: whereSql, params: whereParams } = buildWhereSql(model, "incrementOne", where, updateValues.length, true);
++			const params = [...updateValues, ...whereParams];
++			const driverType = dataSource.options.type;
++			const queryRunner = dataSource.createQueryRunner();
++			await queryRunner.connect();
++			try {
++				let rows;
++				if (driverType === "postgres" || driverType === "cockroachdb") rows = getReturnedRows(await queryRunner.query(`WITH candidate AS (SELECT ${idSql} FROM ${tableSql}${whereSql} LIMIT 1 FOR UPDATE) UPDATE ${tableSql} AS target SET ${assignments.join(", ")} FROM candidate WHERE target.${idSql} = candidate.${idSql} RETURNING target.*`, params, true));
++				else if (driverType === "mssql") rows = getReturnedRows(await queryRunner.query(`UPDATE TOP (1) ${tableSql} SET ${assignments.join(", ")} OUTPUT INSERTED.*${whereSql}`, params, true));
++				else if (driverType === "sqlite" || driverType === "better-sqlite3" || driverType === "sqljs") rows = getReturnedRows(await queryRunner.query(`UPDATE ${tableSql} SET ${assignments.join(", ")} WHERE ${idSql} IN (SELECT ${idSql} FROM ${tableSql}${whereSql} LIMIT 1) RETURNING *`, params, true));
++				else if (driverType === "mysql" || driverType === "mariadb") {
++					await queryRunner.startTransaction();
++					try {
++						const { sql: candidateWhereSql, params: candidateWhereParams } = buildWhereSql(model, "incrementOne", where, 0, true);
++						const candidates = await queryRunner.query(`SELECT * FROM ${tableSql}${candidateWhereSql} LIMIT 1 FOR UPDATE`, candidateWhereParams);
++						if (!candidates[0]) {
++							await queryRunner.commitTransaction();
++							return null;
++						}
++						await queryRunner.query(`UPDATE ${tableSql} SET ${assignments.join(", ")} WHERE ${idSql} = ${createParameterToken(dataSource, updateValues.length)}`, [...updateValues, candidates[0][idColumn]]);
++						const updatedRows = await queryRunner.query(`SELECT * FROM ${tableSql} WHERE ${idSql} = ${createParameterToken(dataSource, 0)}`, [candidates[0][idColumn]]);
++						await queryRunner.commitTransaction();
++						return await transformAtomicOutput(model, updatedRows[0]);
++					} catch (error) {
++						if (queryRunner.isTransactionActive) await queryRunner.rollbackTransaction();
++						throw error;
++					}
++				} else throw new BetterAuthError(`Atomic incrementOne is not supported for TypeORM driver "${driverType}".`);
++				return await transformAtomicOutput(model, rows[0]);
++			} finally {
++				if (queryRunner.isTransactionActive) await queryRunner.rollbackTransaction();
++				await queryRunner.release();
++			}
++		}
+ 		function getAffectedRowCount(result) {
+ 			if (typeof result.affected === "number") return result.affected;
+ 			return 0;
+@@ -814,6 +991,22 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 					throw new BetterAuthError(`Failed to delete ${model}: ${error instanceof Error ? error.message : String(error)}`);
+ 				}
+ 			},
++			async consumeOne({ model, where }) {
++				if (!dataSource.isInitialized) await dataSource.initialize();
++				try {
++					return await rawConsumeOne(model, where);
++				} catch (error) {
++					throw new BetterAuthError(`Failed to consume one ${model}: ${error instanceof Error ? error.message : String(error)}`);
++				}
++			},
++			async incrementOne({ model, where, increment, set }) {
++				if (!dataSource.isInitialized) await dataSource.initialize();
++				try {
++					return await rawIncrementOne(model, where, increment, set);
++				} catch (error) {
++					throw new BetterAuthError(`Failed to increment one ${model}: ${error instanceof Error ? error.message : String(error)}`);
++				}
++			},
+ 			async findOne({ model, where, select }) {
+ 				if (!dataSource.isInitialized) await dataSource.initialize();
+ 				try {
+@@ -906,6 +1099,7 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 							const expectedFields = modelSchema.fields;
+ 							const addColumns = [];
+ 							const dropColumns = [];
++							const addIndexes = getMissingTableIndexes(table, modelSchema);
+ 							for (const [fieldName, field] of Object.entries(expectedFields)) {
+ 								const dbField = field.fieldName || fieldName;
+ 								if (!existingColumns.includes(dbField)) addColumns.push({
+@@ -917,11 +1111,12 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 								if (existingCol === "id") continue;
+ 								if (!Object.entries(expectedFields).some(([fieldName, field]) => (field.fieldName || fieldName) === existingCol)) dropColumns.push(existingCol);
+ 							}
+-							if (addColumns.length > 0 || dropColumns.length > 0) {
++							if (addColumns.length > 0 || dropColumns.length > 0 || addIndexes.length > 0) {
+ 								const migrationFileName = `${timestamp}-alter-${modelName}.ts`;
+ 								const migrationCode = generateMigration(dataSource, modelName, modelSchema, timestamp, "alter", {
+ 									addColumns,
+ 									dropColumns,
++									addIndexes,
+ 									modifyColumns: []
+ 								}, tables, options);
+ 								const migrationPath = path.join(migrationsDir, migrationFileName);
+@@ -931,6 +1126,7 @@ const typeormAdapter = (dataSource, options) => createAdapterFactory({
+ 								changelogContent += `- Updated Entity: entities/${modelName.charAt(0).toUpperCase() + modelName.slice(1)}.ts\n`;
+ 								if (addColumns.length > 0) changelogContent += `  - Added columns: ${addColumns.map((col) => col.field.fieldName || col.name).join(", ")}\n`;
+ 								if (dropColumns.length > 0) changelogContent += `  - Removed columns: ${dropColumns.join(", ")}\n`;
++								if (addIndexes.length > 0) changelogContent += `  - Added indexes: ${addIndexes.map((index) => index.name).join(", ")}\n`;
+ 								changelogContent += "\n";
+ 								hasChanges = true;
+ 							} else if (fs.existsSync(entityPath)) {

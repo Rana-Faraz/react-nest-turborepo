@@ -40,7 +40,8 @@ async function bootstrap() {
 }
 
 void bootstrap().catch((error: unknown) => {
-  const message = error instanceof Error ? error.message : "Unknown startup error";
+  const message =
+    error instanceof Error ? error.message : "Unknown startup error";
   defaultWorkerLogger.error(`Worker failed to start: ${message}`, error);
   process.exit(1);
 });

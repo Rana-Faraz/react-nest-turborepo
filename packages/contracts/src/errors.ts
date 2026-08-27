@@ -1,9 +1,6 @@
-import { z, type ZodIssue } from "zod";
+import { z } from "zod";
 
-export const apiErrorIssuePathSegmentSchema = z.union([
-  z.string(),
-  z.number(),
-]);
+export const apiErrorIssuePathSegmentSchema = z.union([z.string(), z.number()]);
 
 export const apiErrorIssueSchema = z.object({
   code: z.string(),
@@ -28,12 +25,18 @@ export type ApiErrorIssue = z.infer<typeof apiErrorIssueSchema>;
 export type ApiErrorDetails = z.infer<typeof apiErrorDetailsSchema>;
 export type ApiErrorResponse = z.infer<typeof apiErrorResponseSchema>;
 
+export interface ValidationIssueInput {
+  code: string;
+  message: string;
+  path: readonly PropertyKey[];
+}
+
 export function issuePathToFieldKey(path: ApiErrorIssue["path"]): string {
   return path.map(String).join(".");
 }
 
 function normalizeIssues(
-  issues: ReadonlyArray<Pick<ZodIssue, "code" | "message" | "path">>,
+  issues: ReadonlyArray<ValidationIssueInput>,
 ): ApiErrorIssue[] {
   return issues.map((issue) => ({
     code: issue.code,
@@ -45,7 +48,7 @@ function normalizeIssues(
 }
 
 export function buildValidationErrorDetails(
-  issues: ReadonlyArray<Pick<ZodIssue, "code" | "message" | "path">>,
+  issues: ReadonlyArray<ValidationIssueInput>,
   options: {
     code?: string;
     message?: string;
@@ -76,7 +79,7 @@ export function buildValidationErrorDetails(
 }
 
 export function createValidationErrorResponse(
-  issues: ReadonlyArray<Pick<ZodIssue, "code" | "message" | "path">>,
+  issues: ReadonlyArray<ValidationIssueInput>,
   options: {
     statusCode?: number;
     code?: string;
@@ -89,6 +92,8 @@ export function createValidationErrorResponse(
   });
 }
 
-export function createApiErrorResponse(input: ApiErrorResponse): ApiErrorResponse {
+export function createApiErrorResponse(
+  input: ApiErrorResponse,
+): ApiErrorResponse {
   return apiErrorResponseSchema.parse(input);
 }

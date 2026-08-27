@@ -9,18 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from "./routes/__root";
-import { Route as AuthRouteImport } from "./routes/_auth";
 import { Route as AppRouteImport } from "./routes/_app";
+import { Route as AuthRouteImport } from "./routes/_auth";
 import { Route as AppIndexRouteImport } from "./routes/_app/index";
-import { Route as AuthSignUpRouteImport } from "./routes/_auth/sign-up";
 import { Route as AuthSignInRouteImport } from "./routes/_auth/sign-in";
+import { Route as AuthSignUpRouteImport } from "./routes/_auth/sign-up";
 
-const AuthRoute = AuthRouteImport.update({
-  id: "/_auth",
-  getParentRoute: () => rootRouteImport,
-} as any);
 const AppRoute = AppRouteImport.update({
   id: "/_app",
+  getParentRoute: () => rootRouteImport,
+} as any);
+const AuthRoute = AuthRouteImport.update({
+  id: "/_auth",
   getParentRoute: () => rootRouteImport,
 } as any);
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -28,14 +28,14 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: "/",
   getParentRoute: () => AppRoute,
 } as any);
-const AuthSignUpRoute = AuthSignUpRouteImport.update({
-  id: "/sign-up",
-  path: "/sign-up",
-  getParentRoute: () => AuthRoute,
-} as any);
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: "/sign-in",
   path: "/sign-in",
+  getParentRoute: () => AuthRoute,
+} as any);
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: "/sign-up",
+  path: "/sign-up",
   getParentRoute: () => AuthRoute,
 } as any);
 
@@ -78,18 +78,18 @@ export interface RootRouteChildren {
 
 declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    "/_auth": {
-      id: "/_auth";
-      path: "";
-      fullPath: "/";
-      preLoaderRoute: typeof AuthRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
     "/_app": {
       id: "/_app";
       path: "";
       fullPath: "/";
       preLoaderRoute: typeof AppRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_auth": {
+      id: "/_auth";
+      path: "";
+      fullPath: "/";
+      preLoaderRoute: typeof AuthRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     "/_app/": {
@@ -99,18 +99,18 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof AppIndexRouteImport;
       parentRoute: typeof AppRoute;
     };
-    "/_auth/sign-up": {
-      id: "/_auth/sign-up";
-      path: "/sign-up";
-      fullPath: "/sign-up";
-      preLoaderRoute: typeof AuthSignUpRouteImport;
-      parentRoute: typeof AuthRoute;
-    };
     "/_auth/sign-in": {
       id: "/_auth/sign-in";
       path: "/sign-in";
       fullPath: "/sign-in";
       preLoaderRoute: typeof AuthSignInRouteImport;
+      parentRoute: typeof AuthRoute;
+    };
+    "/_auth/sign-up": {
+      id: "/_auth/sign-up";
+      path: "/sign-up";
+      fullPath: "/sign-up";
+      preLoaderRoute: typeof AuthSignUpRouteImport;
       parentRoute: typeof AuthRoute;
     };
   }

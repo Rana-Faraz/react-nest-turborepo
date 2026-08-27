@@ -1,4 +1,8 @@
-import { useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import {
   Outlet,
   createFileRoute,
@@ -26,7 +30,7 @@ function AppNavbar() {
   });
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-lg">
+    <header className="border-border bg-background/80 sticky top-0 z-40 border-b backdrop-blur-lg">
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
         <Link className="text-lg font-semibold tracking-tight" to="/">
           App
@@ -34,7 +38,7 @@ function AppNavbar() {
         <div className="flex items-center gap-4">
           {session ? (
             <>
-              <span className="hidden text-sm text-muted-foreground sm:inline">
+              <span className="text-muted-foreground hidden text-sm sm:inline">
                 {session.user.email}
               </span>
               <Separator className="h-5" orientation="vertical" />
@@ -56,7 +60,7 @@ function AppNavbar() {
 
 function AppLayoutComponent() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="bg-background text-foreground min-h-screen">
       <AppNavbar />
       <Outlet />
     </div>

@@ -1,23 +1,23 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryColumn } from "typeorm";
 
-@Entity('verification')
+@Entity("verification")
+@Index("IDX_verification_identifier", ["identifier"])
 export class Verification {
-  @PrimaryColumn('text')
+  @PrimaryColumn("text")
   id!: string;
 
-  @Column('text', { name: 'identifier' })
+  @Column("text", { name: "identifier" })
   identifier!: string;
 
-  @Column('text', { name: 'value' })
+  @Column("text", { name: "value" })
   value!: string;
 
-  @Column('date', { name: 'expiresAt' })
+  @Column("timestamptz", { name: "expiresAt" })
   expiresAt!: Date;
 
-  @Column('date', { name: 'createdAt' })
+  @Column("timestamptz", { name: "createdAt" })
   createdAt!: Date;
 
-  @Column('date', { name: 'updatedAt' })
+  @Column("timestamptz", { name: "updatedAt" })
   updatedAt!: Date;
-
 }

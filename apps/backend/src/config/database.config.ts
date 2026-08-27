@@ -1,14 +1,17 @@
-import { resolve } from "node:path";
-import { ConfigModule } from "@nestjs/config";
-import { DataSourceOptions } from "typeorm";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import type { DataSourceOptions } from "typeorm";
+import { Account } from "../entities/Account.js";
+import { Session } from "../entities/Session.js";
+import { User } from "../entities/User.js";
+import { Verification } from "../entities/Verification.js";
 
-ConfigModule.forRoot({
-  isGlobal: true,
-  envFilePath: resolve(__dirname, "../../.env"),
-});
+const currentDirectory = dirname(fileURLToPath(import.meta.url));
 
-function getRequiredEnv(key: string): string {
-  const value = process.env[key];
+export type EnvironmentReader = (key: string) => string | undefined;
+
+function getRequiredEnv(readEnv: EnvironmentReader, key: string): string {
+  const value = readEnv(key);
 
   if (!value) {
     throw new Error(`${key} is required`);
@@ -17,35 +20,30 @@ function getRequiredEnv(key: string): string {
   return value;
 }
 
-const isLocal = process.env["NODE_ENV"] === "local";
-const dbHost = getRequiredEnv("DB_HOST");
-const dbUser = getRequiredEnv("DB_USER");
-const dbName = getRequiredEnv("DB_NAME");
-const dbPassword = process.env["DB_PASSWORD"] || undefined;
-const databaseConfig: DataSourceOptions = {
-  type: "postgres",
-  host: dbHost,
-  port: Number(process.env["DB_PORT"]) || 5432,
-  username: dbUser,
-  ...(dbPassword ? { password: dbPassword } : {}),
-  database: dbName,
-  entities: [__dirname + "../../**/**/*entity{.ts,.js}"],
+export function createDatabaseConfig(
+  readEnv: EnvironmentReader = (key) => process.env[key],
+): DataSourceOptions {
+  const dbPassword = readEnv("DB_PASSWORD") || undefined;
+  const isProduction = readEnv("NODE_ENV") === "production";
 
-  // We are using migrations, synchronize should be set to false.
-  synchronize: false,
-  migrationsRun: true,
-  // "each" wraps every migration in its own transaction (same safety as "all")
-  // but allows individual migrations to set `transaction = false` when needed
-  // (e.g. CREATE INDEX CONCURRENTLY cannot run inside a transaction).
-  migrationsTransactionMode: "each",
-  migrations: [__dirname + "/../migrations/*{.ts,.js}"],
-  ...(!isLocal
-    ? {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      }
-    : {}),
-};
-
-export default databaseConfig;
+  return {
+    type: "postgres",
+    host: getRequiredEnv(readEnv, "DB_HOST"),
+    port: Number(readEnv("DB_PORT")) || 5432,
+    username: getRequiredEnv(readEnv, "DB_USER"),
+    ...(dbPassword ? { password: dbPassword } : {}),
+    database: getRequiredEnv(readEnv, "DB_NAME"),
+    entities: [Account, Session, User, Verification],
+    synchronize: false,
+    migrationsRun: true,
+    migrationsTransactionMode: "each",
+    migrations: [join(currentDirectory, "../migrations/*{.ts,.js}")],
+    ...(isProduction
+      ? {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        }
+      : {}),
+  };
+}

@@ -1,9 +1,11 @@
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 
-export function AppShell({ children }: Readonly<{ children: React.ReactNode }>) {
+export function AppShell({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <main className="bg-background text-foreground min-h-screen">
       <div className="mx-auto flex min-h-screen max-w-5xl items-center justify-center px-6 py-16">
         {children}
       </div>
@@ -15,8 +17,8 @@ export function AppCard({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <section
       className={cn(
-        "w-full rounded-3xl border border-border bg-card p-10 shadow-sm",
-        "sm:p-14",
+        "border-border bg-card w-full rounded-3xl border p-10 shadow-sm",
+        "sm:p-14"
       )}
     >
       {children}
@@ -29,12 +31,12 @@ export function AppPending() {
     <AppShell>
       <AppCard>
         <div className="space-y-4">
-          <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
+          <p className="text-muted-foreground text-sm font-medium tracking-[0.24em] uppercase">
             Loading
           </p>
-          <div className="h-10 w-2/3 animate-pulse rounded-xl bg-muted" />
-          <div className="h-5 w-full animate-pulse rounded-lg bg-muted" />
-          <div className="h-5 w-5/6 animate-pulse rounded-lg bg-muted" />
+          <div className="bg-muted h-10 w-2/3 animate-pulse rounded-xl" />
+          <div className="bg-muted h-5 w-full animate-pulse rounded-lg" />
+          <div className="bg-muted h-5 w-5/6 animate-pulse rounded-lg" />
         </div>
       </AppCard>
     </AppShell>
@@ -56,17 +58,17 @@ export function AppErrorState({
     <AppShell>
       <AppCard>
         <div className="space-y-4">
-          <p className="text-sm font-medium uppercase tracking-[0.24em] text-destructive">
+          <p className="text-destructive text-sm font-medium tracking-[0.24em] uppercase">
             Error
           </p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
             {title}
           </h1>
-          <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
+          <p className="text-muted-foreground max-w-2xl text-base leading-7 sm:text-lg">
             {message}
           </p>
           <button
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+            className="bg-primary text-primary-foreground inline-flex h-11 items-center justify-center rounded-xl px-5 text-sm font-medium transition hover:opacity-90"
             onClick={onRetry}
             type="button"
           >
@@ -96,7 +98,7 @@ export function NotFoundComponent() {
     <AppShell>
       <AppCard>
         <div className="space-y-4">
-          <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground">
+          <p className="text-muted-foreground text-sm font-medium tracking-[0.24em] uppercase">
             Not Found
           </p>
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">

@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryColumn } from "typeorm";
 
 @Entity("user")
+@Index("IDX_user_email", ["email"], { unique: true })
 export class User {
   @PrimaryColumn("text")
   id!: string;
@@ -8,7 +9,7 @@ export class User {
   @Column("text", { name: "name" })
   name!: string;
 
-  @Column("text", { name: "email", unique: true })
+  @Column("text", { name: "email" })
   email!: string;
 
   @Column("boolean", { name: "emailVerified" })
@@ -17,9 +18,9 @@ export class User {
   @Column("text", { name: "image", nullable: true })
   image!: string | null;
 
-  @Column("date", { name: "createdAt" })
+  @Column("timestamptz", { name: "createdAt" })
   createdAt!: Date;
 
-  @Column("date", { name: "updatedAt" })
+  @Column("timestamptz", { name: "updatedAt" })
   updatedAt!: Date;
 }

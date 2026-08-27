@@ -16,13 +16,11 @@ describe("createLogMessageJobDefinition", () => {
     const { calls, logger } = createLoggerSpy();
     const jobDefinition = createLogMessageJobDefinition(logger);
 
-    await jobDefinition.handle(
-      {
-        id: "43",
-        name: LOG_MESSAGE_JOB.name,
-        data: { message: "hello from bullmq" },
-      } as Job<unknown>,
-    );
+    await jobDefinition.handle({
+      id: "43",
+      name: LOG_MESSAGE_JOB.name,
+      data: { message: "hello from bullmq" },
+    } as Job<unknown>);
 
     expect(calls.info).toEqual(["hello from bullmq"]);
   });

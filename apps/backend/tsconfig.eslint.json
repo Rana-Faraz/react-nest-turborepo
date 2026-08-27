@@ -1,5 +1,0 @@
-// tsconfig.eslint.json
-{
-  "extends": "./tsconfig.json",
-  "include": [".eslintrc.js", "./**/*.ts", "./**/*.tsx", "./.*.ts"]
-}

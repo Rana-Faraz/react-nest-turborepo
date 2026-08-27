@@ -27,19 +27,21 @@
     }
   },
   "dependencies": {
-    "@react-email/components": "1.0.1",
-    "react": "^19.2.1"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-email": "6.9.3"
   },
   "devDependencies": {
-    "@react-email/preview-server": "5.0.7",
+    "@react-email/ui": "6.9.3",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "25.0.0",
-    "@types/react": "19.2.7",
-    "@types/react-dom": "19.2.3",
-    "eslint": "^9.37.0",
-    "knip": "^6.1.0",
-    "react-email": "5.0.7",
-    "tsup": "^8.5.0"
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "@types/node": "24.13.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "eslint": "^10.9.1",
+    "knip": "^6.32.3",
+    "tsup": "^8.5.1",
+    "typescript": "npm:@typescript/typescript6@^6.0.2"
   }
 }

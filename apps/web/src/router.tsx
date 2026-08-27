@@ -25,7 +25,5 @@ declare module "@tanstack/react-router" {
 export function AppRouterProvider() {
   const session = queryClient.getQueryData(sessionQueryOptions().queryKey);
 
-  return (
-    <RouterProvider router={router} context={{ auth: session ?? null }} />
-  );
+  return <RouterProvider router={router} context={{ auth: session ?? null }} />;
 }

@@ -71,7 +71,7 @@ function HomeRouteComponent() {
             </h1>
             <p className="text-muted-foreground max-w-2xl text-base leading-7 sm:text-lg">
               The canonical API schema lives in <code>@repo/contracts</code>.
-              Nest derives DTOs through <code>nestjs-zod</code>, and the
+              Nest validates and serializes with those Standard Schemas, and the
               frontend uses the same schemas for request shaping, response
               parsing, and mutation input validation.
             </p>

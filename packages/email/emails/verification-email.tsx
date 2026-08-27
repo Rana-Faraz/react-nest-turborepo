@@ -1,1 +1,4 @@
-export { VerificationEmail as default, VerificationEmail } from "../src/verification-email";
+export {
+  VerificationEmail as default,
+  VerificationEmail,
+} from "../src/verification-email";

@@ -1,3 +1,22 @@
 packages:
   - "apps/*"
   - "packages/*"
+autoInstallPeers: false
+strictPeerDependencies: true
+allowBuilds:
+  "@swc/core": true
+  esbuild: true
+  msgpackr-extract: true
+  sharp: true
+  unrs-resolver: true
+minimumReleaseAge: 0
+overrides:
+  brace-expansion@5: 5.0.9
+  defu@6: 6.1.7
+  engine.io@6: 6.6.9
+  fast-uri@3: 3.1.5
+  flatted@3: 3.4.4
+  socket.io-parser@4: 4.2.7
+  ws@8: 8.21.3
+patchedDependencies:
+  "@hedystia/better-auth-typeorm@1.1.0": patches/@hedystia__better-auth-typeorm@1.1.0.patch

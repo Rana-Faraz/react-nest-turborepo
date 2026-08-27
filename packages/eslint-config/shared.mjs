@@ -1,12 +1,11 @@
 import js from "@eslint/js";
+import vitest from "@vitest/eslint-plugin";
 import importX from "eslint-plugin-import-x";
-import jest from "eslint-plugin-jest";
 import noOnlyTests from "eslint-plugin-no-only-tests";
 import promise from "eslint-plugin-promise";
 import security from "eslint-plugin-security";
 import sonarjs from "eslint-plugin-sonarjs";
 import unusedImports from "eslint-plugin-unused-imports";
-import vitest from "eslint-plugin-vitest";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -31,7 +30,6 @@ const DEFAULT_IGNORES = [
   "**/node_modules/**",
   "**/routeTree.gen.ts",
   "**/tsup.config.ts",
-  "**/vite.config.ts",
 ];
 
 const sharedExtends = /** @type {unknown[]} */ ([
@@ -41,11 +39,10 @@ const sharedExtends = /** @type {unknown[]} */ ([
 ]);
 
 export const browserGlobals = globals.browser;
-export const jestGlobals = globals.jest;
+/** @type {import("eslint").ESLint.Plugin} */
 export const noOnlyTestsPlugin = noOnlyTests;
 export const nodeGlobals = globals.node;
-export const vitestGlobals = globals.vitest;
-export const jestPlugin = jest;
+export const vitestGlobals = vitest.environments.env.globals;
 export const vitestPlugin = vitest;
 
 /**

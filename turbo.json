@@ -1,5 +1,5 @@
 {
-  "$schema": "https://turborepo.com/schema.json",
+  "$schema": "https://v2-10-12.turborepo.dev/schema.json",
   "ui": "tui",
   "tasks": {
     "build": {
@@ -8,13 +8,15 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/dist/**"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["^build"]
     },
-    "knip": {},
+    "knip": {
+      "dependsOn": ["^build"]
+    },
     "lint": {},
     "test": {
-      "dependsOn": ["^test"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "apps/backend/src/**/*.spec.ts"]
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "dev": {
       "dependsOn": ["^build"],
@@ -22,9 +24,9 @@
       "persistent": true
     },
     "migration:generate": {
-      "dependsOn": ["^migration:generate"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", "apps/backend/src/**/*.ts"],
-      "outputs": ["apps/backend/src/migrations/**/*.ts"]
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "src/**/*.ts"],
+      "outputs": ["src/migrations/**/*.ts"]
     }
   }
 }

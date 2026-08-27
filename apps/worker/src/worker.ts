@@ -20,16 +20,13 @@ export const defaultWorkerLogger: WorkerLogger = {
   },
 };
 
-export function createJobHandler(
-  config: WorkerConfig,
-  logger: WorkerLogger,
-) {
+export function createJobHandler(config: WorkerConfig, logger: WorkerLogger) {
   return createWorkerJobHandler(config, logger);
 }
 
 export type WorkerEventName = "active" | "completed" | "failed" | "error";
 
-export type WorkerEventListeners = Pick<
+type WorkerEventListeners = Pick<
   BullMQWorkerListener<unknown, void, string>,
   WorkerEventName
 >;
@@ -66,11 +63,15 @@ export function createBackgroundWorker(
   config: WorkerConfig,
   logger: WorkerLogger = defaultWorkerLogger,
 ) {
-  const worker = new Worker(config.queueName, createJobHandler(config, logger), {
-    concurrency: config.concurrency,
-    connection: config.redis,
-    ...(config.redisQueuePrefix ? { prefix: config.redisQueuePrefix } : {}),
-  });
+  const worker = new Worker(
+    config.queueName,
+    createJobHandler(config, logger),
+    {
+      concurrency: config.concurrency,
+      connection: config.redis,
+      ...(config.redisQueuePrefix ? { prefix: config.redisQueuePrefix } : {}),
+    },
+  );
 
   registerWorkerEventLogging(worker, logger);
 

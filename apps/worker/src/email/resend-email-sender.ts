@@ -1,6 +1,6 @@
 import type { WorkerConfig } from "../config";
 
-export interface ResendSendResponse {
+interface ResendSendResponse {
   data?: {
     id?: string;
   } | null;
@@ -27,7 +27,9 @@ async function initializeResendSdk(apiKey: string): Promise<ResendClientLike> {
 
 export function createResendClientProvider(
   config: WorkerConfig,
-  clientFactory: (apiKey: string) => Promise<ResendClientLike> = initializeResendSdk,
+  clientFactory: (
+    apiKey: string,
+  ) => Promise<ResendClientLike> = initializeResendSdk,
 ): ResendClientProvider {
   let clientPromise: Promise<ResendClientLike> | undefined;
 

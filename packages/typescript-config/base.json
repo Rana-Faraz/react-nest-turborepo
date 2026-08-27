@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": false,
     "isolatedModules": false,
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "lib": ["ES2022"],
     "module": "NodeNext",
     "moduleDetection": "force",
     "moduleResolution": "NodeNext",
@@ -27,6 +27,7 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022",
+    "types": [],
     "useUnknownInCatchVariables": true
   }
 }

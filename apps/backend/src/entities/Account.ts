@@ -1,9 +1,24 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from "typeorm";
+import { User } from "./User.js";
 
 @Entity("account")
+@Index("UQ_account_issuer_accountId", ["issuer", "accountId"], {
+  unique: true,
+})
+@Index("IDX_account_userId", ["userId"])
 export class Account {
   @PrimaryColumn("text")
   id!: string;
+
+  @Column("text", { name: "issuer" })
+  issuer!: string;
 
   @Column("text", { name: "accountId" })
   accountId!: string;
@@ -14,6 +29,14 @@ export class Account {
   @Column("text", { name: "userId" })
   userId!: string;
 
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({
+    name: "userId",
+    referencedColumnName: "id",
+    foreignKeyConstraintName: "FK_account_userId",
+  })
+  user!: User;
+
   @Column("text", { name: "accessToken", nullable: true })
   accessToken!: string | null;
 
@@ -23,10 +46,10 @@ export class Account {
   @Column("text", { name: "idToken", nullable: true })
   idToken!: string | null;
 
-  @Column("date", { name: "accessTokenExpiresAt", nullable: true })
+  @Column("timestamptz", { name: "accessTokenExpiresAt", nullable: true })
   accessTokenExpiresAt!: Date | null;
 
-  @Column("date", { name: "refreshTokenExpiresAt", nullable: true })
+  @Column("timestamptz", { name: "refreshTokenExpiresAt", nullable: true })
   refreshTokenExpiresAt!: Date | null;
 
   @Column("text", { name: "scope", nullable: true })
@@ -35,9 +58,9 @@ export class Account {
   @Column("text", { name: "password", nullable: true })
   password!: string | null;
 
-  @Column("date", { name: "createdAt" })
+  @Column("timestamptz", { name: "createdAt" })
   createdAt!: Date;
 
-  @Column("date", { name: "updatedAt" })
+  @Column("timestamptz", { name: "updatedAt" })
   updatedAt!: Date;
 }

@@ -3,6 +3,7 @@ import {
   SEND_VERIFICATION_EMAIL_JOB,
   type SendVerificationEmailJobData,
 } from "@repo/jobs";
+import { UnrecoverableError } from "bullmq";
 import { createElement } from "react";
 import type { WorkerConfig } from "../config";
 import type { ResendClientProvider } from "../email/resend-email-sender";
@@ -70,11 +71,24 @@ function isRetryableResendError(error: unknown): boolean {
   return resendError.statusCode === 429 || resendError.statusCode === 500;
 }
 
-function buildResendErrorMessage(error: unknown, idempotencyKey: string): string {
+function buildResendErrorMessage(
+  error: unknown,
+  idempotencyKey: string,
+): string {
   const resendError = toResendErrorLike(error);
   const reason = resendError.message ?? "Unknown Resend API error";
 
   return `Failed to send verification email via Resend (${idempotencyKey}): ${reason}`;
+}
+
+function toBullMQJobError(error: unknown): unknown {
+  if (error instanceof VerificationEmailJobError && !error.retryable) {
+    const unrecoverableError = new UnrecoverableError(error.message);
+    unrecoverableError.cause = error;
+    return unrecoverableError;
+  }
+
+  return error;
 }
 
 function resolveVerificationIdempotencyKey(
@@ -155,9 +169,7 @@ export function createSendVerificationEmailJobDefinition(
               ...(data.expiresInHours
                 ? { expiresInHours: data.expiresInHours }
                 : {}),
-              ...(data.supportEmail
-                ? { supportEmail: data.supportEmail }
-                : {}),
+              ...(data.supportEmail ? { supportEmail: data.supportEmail } : {}),
             }),
           },
           {
@@ -186,10 +198,6 @@ export function createSendVerificationEmailJobDefinition(
 
         logger.info(`Sent verification email ${emailId} for job ${job.id}`);
       } catch (error) {
-        if (error instanceof VerificationEmailJobError && !error.retryable) {
-          job.discard();
-        }
-
         const message =
           error instanceof Error ? error.message : "Unknown email send failure";
         logger.error(
@@ -197,7 +205,7 @@ export function createSendVerificationEmailJobDefinition(
           error,
         );
 
-        throw error;
+        throw toBullMQJobError(error);
       }
     },
   };

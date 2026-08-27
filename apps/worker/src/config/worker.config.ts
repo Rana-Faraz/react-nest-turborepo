@@ -4,7 +4,7 @@ import { parseInteger } from "./parsers";
 import { loadRedisConfig } from "./redis.config";
 import type { WorkerConfig } from "./types";
 
-export const DEFAULT_WORKER_NAME = "tournament-worker";
+export const DEFAULT_WORKER_NAME = "background-worker";
 export const DEFAULT_QUEUE_NAME = BACKGROUND_TASKS_QUEUE.name;
 export const DEFAULT_WORKER_CONCURRENCY = 5;
 

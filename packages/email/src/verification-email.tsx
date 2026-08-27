@@ -12,7 +12,7 @@ import {
   Tailwind,
   Text,
   pixelBasedPreset,
-} from "@react-email/components";
+} from "react-email";
 import type { ReactElement } from "react";
 
 export interface VerificationEmailProps {
@@ -73,8 +73,9 @@ export const VerificationEmail: VerificationEmailComponent = ({
                 {name ? `Hi ${name},` : "Hi,"}
               </Text>
               <Text className="m-0 mt-[16px] text-[16px] leading-[26px] text-ink">
-                Finish setting up your account by verifying the email address you
-                just used to sign up. This link expires in {expiresInHours} hours.
+                Finish setting up your account by verifying the email address
+                you just used to sign up. This link expires in {expiresInHours}{" "}
+                hours.
               </Text>
             </Section>
 

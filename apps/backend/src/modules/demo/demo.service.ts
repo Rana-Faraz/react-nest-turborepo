@@ -14,7 +14,7 @@ import {
 } from "@repo/jobs";
 import { Injectable } from "@nestjs/common";
 import { randomUUID } from "node:crypto";
-import { BackgroundJobsService } from "../background-jobs/background-jobs.service";
+import { BackgroundJobsService } from "../background-jobs/background-jobs.service.js";
 
 @Injectable()
 export class DemoService {
@@ -27,9 +27,7 @@ export class DemoService {
     },
   ];
 
-  constructor(
-    private readonly backgroundJobsService: BackgroundJobsService,
-  ) {}
+  constructor(private readonly backgroundJobsService: BackgroundJobsService) {}
 
   list(query: ListDemoSubmissionsQuery): ListDemoSubmissionsResponse {
     const search = query.search?.toLowerCase();
@@ -58,9 +56,7 @@ export class DemoService {
     return createDemoSubmissionResponseSchema.parse({ item });
   }
 
-  async enqueueLogMessage(
-    body: LogMessageJobData,
-  ): Promise<QueuedJobResponse> {
+  async enqueueLogMessage(body: LogMessageJobData): Promise<QueuedJobResponse> {
     const response = await this.backgroundJobsService.enqueueLogMessage(
       body.message,
     );

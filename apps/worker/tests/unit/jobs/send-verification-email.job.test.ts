@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { SEND_VERIFICATION_EMAIL_JOB } from "@repo/jobs";
-import type { Job } from "bullmq";
+import { type Job, UnrecoverableError } from "bullmq";
 import { loadWorkerConfig } from "../../../src/config";
 import type {
   ResendClientLike,
@@ -67,21 +67,18 @@ describe("createSendVerificationEmailJobDefinition", () => {
       getResendClient,
     );
 
-    await jobDefinition.handle(
-      {
-        id: "job-123",
-        name: SEND_VERIFICATION_EMAIL_JOB.name,
-        data: {
-          email: "player@example.com",
-          name: "Jordan",
-          productName: "Tournament Hub",
-          verificationUrl: "https://example.com/verify-email?token=abc123",
-          expiresInHours: 12,
-          supportEmail: "support@example.com",
-        },
-        discard() {},
-      } as Job<unknown>,
-    );
+    await jobDefinition.handle({
+      id: "job-123",
+      name: SEND_VERIFICATION_EMAIL_JOB.name,
+      data: {
+        email: "player@example.com",
+        name: "Jordan",
+        productName: "Tournament Hub",
+        verificationUrl: "https://example.com/verify-email?token=abc123",
+        expiresInHours: 12,
+        supportEmail: "support@example.com",
+      },
+    } as unknown as Job<unknown>);
 
     expect(sendCalls).toHaveLength(1);
     expect(sendCalls[0]?.payload).toMatchObject({
@@ -99,9 +96,8 @@ describe("createSendVerificationEmailJobDefinition", () => {
     ]);
   });
 
-  it("discards non-retryable verification send failures", async () => {
+  it("marks non-retryable verification send failures as unrecoverable", async () => {
     const { calls, logger } = createLoggerSpy();
-    let discardCount = 0;
     const getResendClient: ResendClientProvider = async () => ({
       emails: {
         send: async () => ({
@@ -122,22 +118,16 @@ describe("createSendVerificationEmailJobDefinition", () => {
     );
 
     await expect(
-      jobDefinition.handle(
-        {
-          id: "job-456",
-          name: SEND_VERIFICATION_EMAIL_JOB.name,
-          data: {
-            email: "player@example.com",
-            verificationUrl: "https://example.com/verify-email?token=abc123",
-          },
-          discard() {
-            discardCount += 1;
-          },
-        } as Job<unknown>,
-      ),
-    ).rejects.toThrow("recipient is invalid");
+      jobDefinition.handle({
+        id: "job-456",
+        name: SEND_VERIFICATION_EMAIL_JOB.name,
+        data: {
+          email: "player@example.com",
+          verificationUrl: "https://example.com/verify-email?token=abc123",
+        },
+      } as unknown as Job<unknown>),
+    ).rejects.toBeInstanceOf(UnrecoverableError);
 
-    expect(discardCount).toBe(1);
     expect(calls.error).toEqual([
       {
         message:
@@ -149,7 +139,6 @@ describe("createSendVerificationEmailJobDefinition", () => {
 
   it("keeps rate-limited sends retryable", async () => {
     const { calls, logger } = createLoggerSpy();
-    let discardCount = 0;
     const getResendClient: ResendClientProvider = async () => ({
       emails: {
         send: async () => ({
@@ -170,22 +159,16 @@ describe("createSendVerificationEmailJobDefinition", () => {
     );
 
     await expect(
-      jobDefinition.handle(
-        {
-          id: "job-789",
-          name: SEND_VERIFICATION_EMAIL_JOB.name,
-          data: {
-            email: "player@example.com",
-            verificationUrl: "https://example.com/verify-email?token=abc123",
-          },
-          discard() {
-            discardCount += 1;
-          },
-        } as Job<unknown>,
-      ),
+      jobDefinition.handle({
+        id: "job-789",
+        name: SEND_VERIFICATION_EMAIL_JOB.name,
+        data: {
+          email: "player@example.com",
+          verificationUrl: "https://example.com/verify-email?token=abc123",
+        },
+      } as unknown as Job<unknown>),
     ).rejects.toThrow("slow down");
 
-    expect(discardCount).toBe(0);
     expect(calls.error).toEqual([
       {
         message:
@@ -197,7 +180,6 @@ describe("createSendVerificationEmailJobDefinition", () => {
 
   it("fails fast when the from email is missing", async () => {
     const { calls, logger } = createLoggerSpy();
-    let discardCount = 0;
     const getResendClient: ResendClientProvider = async () =>
       ({
         emails: {
@@ -215,22 +197,16 @@ describe("createSendVerificationEmailJobDefinition", () => {
     );
 
     await expect(
-      jobDefinition.handle(
-        {
-          id: "job-999",
-          name: SEND_VERIFICATION_EMAIL_JOB.name,
-          data: {
-            email: "player@example.com",
-            verificationUrl: "https://example.com/verify-email?token=abc123",
-          },
-          discard() {
-            discardCount += 1;
-          },
-        } as Job<unknown>,
-      ),
-    ).rejects.toThrow("RESEND_FROM_EMAIL is required to send verification emails");
+      jobDefinition.handle({
+        id: "job-999",
+        name: SEND_VERIFICATION_EMAIL_JOB.name,
+        data: {
+          email: "player@example.com",
+          verificationUrl: "https://example.com/verify-email?token=abc123",
+        },
+      } as unknown as Job<unknown>),
+    ).rejects.toBeInstanceOf(UnrecoverableError);
 
-    expect(discardCount).toBe(1);
     expect(calls.error).toEqual([
       {
         message:
@@ -240,9 +216,8 @@ describe("createSendVerificationEmailJobDefinition", () => {
     ]);
   });
 
-  it("discards initialization failures such as a missing api key", async () => {
+  it("marks initialization failures such as a missing api key as unrecoverable", async () => {
     const { calls, logger } = createLoggerSpy();
-    let discardCount = 0;
     const getResendClient: ResendClientProvider = async () => {
       throw new Error("RESEND_API_KEY is required to initialize Resend");
     };
@@ -255,22 +230,16 @@ describe("createSendVerificationEmailJobDefinition", () => {
     );
 
     await expect(
-      jobDefinition.handle(
-        {
-          id: "job-1000",
-          name: SEND_VERIFICATION_EMAIL_JOB.name,
-          data: {
-            email: "player@example.com",
-            verificationUrl: "https://example.com/verify-email?token=abc123",
-          },
-          discard() {
-            discardCount += 1;
-          },
-        } as Job<unknown>,
-      ),
-    ).rejects.toThrow("RESEND_API_KEY is required to initialize Resend");
+      jobDefinition.handle({
+        id: "job-1000",
+        name: SEND_VERIFICATION_EMAIL_JOB.name,
+        data: {
+          email: "player@example.com",
+          verificationUrl: "https://example.com/verify-email?token=abc123",
+        },
+      } as unknown as Job<unknown>),
+    ).rejects.toBeInstanceOf(UnrecoverableError);
 
-    expect(discardCount).toBe(1);
     expect(calls.error).toEqual([
       {
         message:

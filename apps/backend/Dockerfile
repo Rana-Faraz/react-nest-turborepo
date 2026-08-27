@@ -1,13 +1,13 @@
 # Prune stage
-FROM node:20-bullseye AS pruner
+FROM node:24-bookworm-slim AS pruner
 
 WORKDIR /app
-RUN npm install -g turbo
+RUN corepack enable && corepack prepare pnpm@11.24.0 --activate
 COPY . .
-RUN turbo prune --scope=backend --docker
+RUN pnpm exec turbo prune backend --docker
 
 # Build stage
-FROM node:20-bullseye AS installer
+FROM node:24-bookworm-slim AS installer
 
 # Create app directory
 WORKDIR /app
@@ -15,20 +15,21 @@ WORKDIR /app
 # Copy package files
 COPY --from=pruner /app/out/json .
 COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=pruner /app/out/pnpm-workspace.yaml ./pnpm-workspace.yaml
 COPY --from=pruner /app/turbo.json ./turbo.json
-RUN npm install -g pnpm
+RUN corepack enable && corepack prepare pnpm@11.24.0 --activate
 RUN pnpm install --frozen-lockfile
 
-FROM node:20-bullseye AS builder
+FROM node:24-bookworm-slim AS builder
 
 WORKDIR /app
 COPY --from=installer /app/ .
 COPY --from=pruner /app/out/full .
-RUN npm install -g pnpm
-RUN pnpm run build
+RUN corepack enable && corepack prepare pnpm@11.24.0 --activate
+RUN pnpm --filter backend... build
 
 # Production stage
-FROM node:20-bullseye AS runner
+FROM node:24-bookworm-slim AS runner
 
 # Set working directory
 WORKDIR /app

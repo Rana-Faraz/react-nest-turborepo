@@ -1,7 +1,6 @@
+import eslintReact from "@eslint-react/eslint-plugin";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import reactCompiler from "eslint-plugin-react-compiler";
-import react from "eslint-plugin-react";
 import {
   browserGlobals,
   createBaseConfig,
@@ -25,22 +24,15 @@ export default createBaseConfig({
         },
       },
       plugins: {
-        react,
-        "react-compiler": reactCompiler,
+        "@eslint-react": eslintReact,
         "react-hooks": reactHooks,
         "react-refresh": reactRefresh,
       },
-      settings: {
-        react: {
-          version: "detect",
-        },
-      },
       rules: {
         ...reactHooks.configs.recommended.rules,
-        "react-compiler/react-compiler": "error",
+        "@eslint-react/no-duplicate-key": "error",
+        "@eslint-react/no-missing-key": "error",
         "react-refresh/only-export-components": "off",
-        "react/jsx-key": "error",
-        "react/jsx-no-duplicate-props": "error",
       },
     },
     {

@@ -1,7 +1,7 @@
 import { BACKGROUND_TASKS_QUEUE } from "@repo/jobs";
 import { BullModule } from "@nestjs/bullmq";
 import { Module } from "@nestjs/common";
-import { BackgroundJobsService } from "./background-jobs.service";
+import { BackgroundJobsService } from "./background-jobs.service.js";
 
 @Module({
   imports: [

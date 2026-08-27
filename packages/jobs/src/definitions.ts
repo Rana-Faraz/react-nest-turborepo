@@ -18,19 +18,20 @@ export interface QueueDefinition<
   jobs: TJobs;
 }
 
-export function defineJob<const TName extends string, TValidate extends JobSchema>(
-  job: JobDefinition<TValidate, TName>,
-): JobDefinition<TValidate, TName> {
+export function defineJob<
+  const TName extends string,
+  TValidate extends JobSchema,
+>(job: JobDefinition<TValidate, TName>): JobDefinition<TValidate, TName> {
   return job;
 }
 
 export function defineQueue<
   const TName extends string,
   const TJobs extends Record<string, JobDefinition>,
->(
-  queue: QueueDefinition<TJobs, TName>,
-): QueueDefinition<TJobs, TName> {
+>(queue: QueueDefinition<TJobs, TName>): QueueDefinition<TJobs, TName> {
   return queue;
 }
 
-export type InferJobData<TJob extends JobDefinition> = z.infer<TJob["validate"]>;
+export type InferJobData<TJob extends JobDefinition> = z.infer<
+  TJob["validate"]
+>;

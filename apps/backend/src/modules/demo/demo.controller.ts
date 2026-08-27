@@ -1,31 +1,41 @@
 import {
+  createDemoSubmissionBodySchema,
+  createDemoSubmissionResponseSchema,
+  listDemoSubmissionsQuerySchema,
+  listDemoSubmissionsResponseSchema,
+  type CreateDemoSubmissionBody,
   type CreateDemoSubmissionResponse,
+  type ListDemoSubmissionsQuery,
   type ListDemoSubmissionsResponse,
 } from "@repo/contracts";
-import { Body, Controller, Get, Post, Query } from "@nestjs/common";
-import { ZodSerializerDto } from "nestjs-zod";
-import { DemoService } from "./demo.service";
 import {
-  CreateDemoSubmissionBodyDto,
-  CreateDemoSubmissionResponseDto,
-  ListDemoSubmissionsQueryDto,
-  ListDemoSubmissionsResponseDto,
-} from "./demo.dto";
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  SerializeOptions,
+} from "@nestjs/common";
+import { DemoService } from "./demo.service.js";
 
 @Controller("demo/submissions")
 export class DemoController {
   constructor(private readonly demoService: DemoService) {}
 
   @Get()
-  @ZodSerializerDto(ListDemoSubmissionsResponseDto)
-  list(@Query() query: ListDemoSubmissionsQueryDto): ListDemoSubmissionsResponse {
+  @SerializeOptions({ schema: listDemoSubmissionsResponseSchema })
+  list(
+    @Query({ schema: listDemoSubmissionsQuerySchema })
+    query: ListDemoSubmissionsQuery,
+  ): ListDemoSubmissionsResponse {
     return this.demoService.list(query);
   }
 
   @Post()
-  @ZodSerializerDto(CreateDemoSubmissionResponseDto)
+  @SerializeOptions({ schema: createDemoSubmissionResponseSchema })
   create(
-    @Body() body: CreateDemoSubmissionBodyDto,
+    @Body({ schema: createDemoSubmissionBodySchema })
+    body: CreateDemoSubmissionBody,
   ): CreateDemoSubmissionResponse {
     return this.demoService.create(body);
   }

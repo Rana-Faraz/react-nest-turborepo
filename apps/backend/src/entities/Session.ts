@@ -1,20 +1,30 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from "typeorm";
+import { User } from "./User.js";
 
 @Entity("session")
+@Index("IDX_session_userId", ["userId"])
+@Index("IDX_session_token", ["token"], { unique: true })
 export class Session {
   @PrimaryColumn("text")
   id!: string;
 
-  @Column("date", { name: "expiresAt" })
+  @Column("timestamptz", { name: "expiresAt" })
   expiresAt!: Date;
 
-  @Column("text", { name: "token", unique: true })
+  @Column("text", { name: "token" })
   token!: string;
 
-  @Column("date", { name: "createdAt" })
+  @Column("timestamptz", { name: "createdAt" })
   createdAt!: Date;
 
-  @Column("date", { name: "updatedAt" })
+  @Column("timestamptz", { name: "updatedAt" })
   updatedAt!: Date;
 
   @Column("text", { name: "ipAddress", nullable: true })
@@ -25,4 +35,12 @@ export class Session {
 
   @Column("text", { name: "userId" })
   userId!: string;
+
+  @ManyToOne(() => User, { onDelete: "CASCADE" })
+  @JoinColumn({
+    name: "userId",
+    referencedColumnName: "id",
+    foreignKeyConstraintName: "FK_session_userId",
+  })
+  user!: User;
 }

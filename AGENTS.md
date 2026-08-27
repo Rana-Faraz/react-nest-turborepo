@@ -4,14 +4,13 @@
 
 - Monorepo managed with `pnpm` and Turborepo.
 - Runtime split:
-  - `apps/backend`: NestJS API with TypeORM, Better Auth, and `nestjs-zod`.
+  - `apps/backend`: NestJS API with TypeORM, Better Auth, and native Standard Schema validation.
   - `apps/web`: React 19 + Vite + TanStack Router + TanStack Query.
   - `apps/worker`: Bun worker for BullMQ jobs.
   - `packages/contracts`: shared Zod schemas and API/error contracts.
   - `packages/jobs`: shared queue definitions and job payload validation.
-  - `packages/types`: shared TS package for cross-project types/utilities.
-- Node requirement: `>=22`.
-- Package manager: `pnpm@9.0.0`.
+- Node requirement: `>=24.15 <25`.
+- Package manager: `pnpm@11.24.0`.
 
 ## Working Norms
 
@@ -64,13 +63,12 @@
 - App entry: `apps/web/src/main.tsx`
 - File-based routes live under `apps/web/src/routes`.
 - Shared API/auth/query helpers live under `apps/web/src/lib` and `apps/web/src/queries`.
-- Router generation is part of web build/dev via `tsr generate`.
+- Router generation runs through the Vite plugin in dev; build and type checks run `tsr generate` explicitly.
 
 ### Shared Packages
 
 - `packages/contracts/src`: canonical cross-app schemas and error helpers.
 - `packages/jobs/src`: canonical queue definitions and job validation.
-- `packages/types/src`: shared low-level TS exports.
 
 ## Change Guidance
 

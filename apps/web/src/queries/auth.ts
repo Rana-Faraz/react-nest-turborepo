@@ -2,7 +2,7 @@ import type { SignInEmailBody, SignUpEmailBody } from "@repo/contracts";
 import { queryOptions } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
 
-export const authQueryKeys = {
+const authQueryKeys = {
   all: ["auth"] as const,
   session: () => [...authQueryKeys.all, "session"] as const,
 };

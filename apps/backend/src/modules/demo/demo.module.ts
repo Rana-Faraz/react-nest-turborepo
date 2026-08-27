@@ -1,8 +1,8 @@
 import { Module } from "@nestjs/common";
-import { BackgroundJobsModule } from "../background-jobs/background-jobs.module";
-import { DemoJobsController } from "./demo-jobs.controller";
-import { DemoController } from "./demo.controller";
-import { DemoService } from "./demo.service";
+import { BackgroundJobsModule } from "../background-jobs/background-jobs.module.js";
+import { DemoJobsController } from "./demo-jobs.controller.js";
+import { DemoController } from "./demo.controller.js";
+import { DemoService } from "./demo.service.js";
 
 @Module({
   imports: [BackgroundJobsModule],

@@ -1,7 +1,4 @@
-import {
-  signInEmailBodySchema,
-  type SignInEmailBody,
-} from "@repo/contracts";
+import { signInEmailBodySchema, type SignInEmailBody } from "@repo/contracts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
@@ -102,7 +99,7 @@ function SignInRouteComponent() {
               value={formValues.email}
             />
             {fieldErrors.email ? (
-              <p className="text-sm text-destructive">{fieldErrors.email}</p>
+              <p className="text-destructive text-sm">{fieldErrors.email}</p>
             ) : null}
           </div>
 
@@ -122,13 +119,13 @@ function SignInRouteComponent() {
               value={formValues.password}
             />
             {fieldErrors.password ? (
-              <p className="text-sm text-destructive">{fieldErrors.password}</p>
+              <p className="text-destructive text-sm">{fieldErrors.password}</p>
             ) : null}
           </div>
 
           {formError ? (
-            <div className="rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3">
-              <p className="text-sm text-destructive">{formError}</p>
+            <div className="border-destructive/20 bg-destructive/5 rounded-lg border px-4 py-3">
+              <p className="text-destructive text-sm">{formError}</p>
             </div>
           ) : null}
         </form>
@@ -142,10 +139,10 @@ function SignInRouteComponent() {
         >
           {signInMutation.isPending ? "Signing in..." : "Sign in"}
         </Button>
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-center text-sm">
           Don&apos;t have an account?{" "}
           <Link
-            className="font-medium text-primary underline-offset-4 hover:underline"
+            className="text-primary font-medium underline-offset-4 hover:underline"
             to="/sign-up"
           >
             Sign up

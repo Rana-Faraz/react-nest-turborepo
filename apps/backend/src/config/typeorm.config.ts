@@ -2,8 +2,12 @@ import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from "@nestjs/typeorm";
-import databaseConfig from "./database.config";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { createDatabaseConfig } from "./database.config.js";
 
 export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
-  useFactory: (): TypeOrmModuleOptions => databaseConfig,
+  imports: [ConfigModule],
+  inject: [ConfigService],
+  useFactory: (configService: ConfigService): TypeOrmModuleOptions =>
+    createDatabaseConfig((key) => configService.get<string>(key)),
 };
